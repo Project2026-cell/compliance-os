@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Innovative OS | Initialize</title>
     <!-- Sophisticated Tech Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Orbitron:wght@400;800&family=Inter:wght@300;600&display=swap" rel="stylesheet">
@@ -15,35 +15,52 @@
 
     * { box-sizing: border-box; }
 
-    body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        background: radial-gradient(circle at top left, var(--primary), var(--bg-dark));
-        font-family: 'Inter', sans-serif;
-        overflow: hidden;
-        color: #fff;
-        transition: opacity 0.8s ease;
-    }
+    /* 1. Force the page to stay exactly the size of the window */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    /* THE FIX: Stop the bounce/swipe gap */
+    overflow: hidden; 
+    overscroll-behavior: none; 
+    position: fixed; /* Prevents the body from moving at all */
+}
 
-    #bg-canvas {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        z-index: 1;
-        opacity: 0.35;
-    }
+body {
+    /* Set a fallback solid color so there is never a "white" gap */
+    background-color: #0f172a; 
+    /* The real background */
+    background: radial-gradient(circle at top left, var(--primary), var(--bg-dark)) no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
 
-    .hero {
-        position: relative;
-        z-index: 3;
-        height: 100vh;
-        display: flex;
-        justify-content: center; 
-        /* VERTICAL POSITION: Center it first, then we use margin to lift it */
-        align-items: center; 
-        padding: 20px;
-    }
+/* 2. Lock the Canvas to the background */
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    opacity: 0.35;
+    pointer-events: none; /* Important: Touch goes through it to buttons */
+}
+
+/* 3. Ensure the Hero fills the screen but doesn't scroll */
+.hero {
+    position: fixed; /* Changed from relative */
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    touch-action: none; /* Disables swiping on the center area */
+}
 
     /* --- SIDE VISUALS --- */
     .left-visual, .right-visual {
@@ -91,18 +108,23 @@
     }
 
     h1 {
-        font-family: 'Orbitron', sans-serif;
-        font-size: clamp(1.5rem, 8vw, 2.4rem);
-        font-weight: 800;
-        letter-spacing: 2px;
-        margin: 10px 0;
-        text-transform: uppercase;
-    }
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.5rem, 8vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin: 10px 0;
+    text-transform: uppercase;
+    /* THE FIX: Force color to White and add a subtle glow */
+    color: #ffffff !important; 
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
 
-    h1 span {
-        color: var(--accent);
-        text-shadow: 0 0 15px rgba(0, 230, 118, 0.5);
-    }
+h1 span {
+    /* THE FIX: Ensure the OS part stays Neon Green */
+    color: var(--accent) !important;
+    text-shadow: 0 0 15px rgba(0, 230, 118, 0.6);
+}
+    
 
     p {
         font-family: 'Michroma', sans-serif;
@@ -324,7 +346,19 @@
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let lines = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function resize() { 
+    // Uses visualViewport for mobile to get the exact usable area
+    const width = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+    const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    
+    canvas.width = width; 
+    canvas.height = height; 
+}
+
+// Add this line to listen for the mobile viewport changes
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', resize);
+}
         
         class DataStream {
             constructor() { this.reset(); }
