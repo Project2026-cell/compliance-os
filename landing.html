@@ -13,7 +13,7 @@
         --bg-dark: #0f172a;
     }
 
-    * { box-sizing: border-box; } /* Prevents padding from breaking widths */
+    * { box-sizing: border-box; }
 
     body, html {
         margin: 0;
@@ -40,7 +40,8 @@
         height: 100vh;
         display: flex;
         justify-content: center; 
-        align-items: center;
+        /* VERTICAL POSITION: Center it first, then we use margin to lift it */
+        align-items: center; 
         padding: 20px;
     }
 
@@ -48,7 +49,7 @@
     .left-visual, .right-visual {
         position: absolute;
         bottom: -20px;
-        width: 25vw; /* Using view-width to scale with screen size */
+        width: 25vw;
         min-width: 200px;
         z-index: 2;
         pointer-events: none;
@@ -66,12 +67,12 @@
     @keyframes floatLeft { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(10px, -10px); } }
     @keyframes floatRight { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-10px, -10px); } }
 
-    /* --- CENTERED GLASS INTERFACE --- */
+    /* --- THE CARD: Lifted Position --- */
     .glass-card {
         background: rgba(255, 255, 255, 0.02);
         backdrop-filter: blur(25px);
         -webkit-backdrop-filter: blur(25px);
-        padding: 40px; /* Reduced from 70px for mobile safety */
+        padding: 40px;
         border-radius: 24px;
         border: 1px solid rgba(255, 255, 255, 0.08);
         box-shadow: 0 40px 100px rgba(0,0,0,0.6);
@@ -79,16 +80,19 @@
         max-width: 420px;
         text-align: center;
         animation: fadeInCenter 1.5s ease-out;
+        
+        /* THIS LIFTS THE CARD UP */
+        margin-bottom: 12vh; 
     }
 
     @keyframes fadeInCenter {
-        from { opacity: 0; transform: scale(0.96); }
-        to { opacity: 1; transform: scale(1); }
+        from { opacity: 0; transform: scale(0.96) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     h1 {
         font-family: 'Orbitron', sans-serif;
-        font-size: clamp(1.5rem, 8vw, 2.4rem); /* Fluid typography */
+        font-size: clamp(1.5rem, 8vw, 2.4rem);
         font-weight: 800;
         letter-spacing: 2px;
         margin: 10px 0;
@@ -110,10 +114,9 @@
         text-transform: uppercase;
     }
 
-    /* --- SCANNING BUTTON --- */
     .enter-btn {
         position: relative;
-        padding: 18px 0; /* Use width for horizontal spacing */
+        padding: 18px 0;
         width: 100%;
         max-width: 280px;
         background: rgba(0, 230, 118, 0.05);
@@ -149,7 +152,6 @@
         transform: translateY(-2px);
     }
 
-    /* --- PROGRESS BAR --- */
     #progress-container {
         display: none;
         margin-top: 20px;
@@ -198,23 +200,25 @@
         letter-spacing: 1px;
     }
 
-    /* --- THE MOBILE FIX --- */
+    /* --- MOBILE REFINEMENT --- */
     @media (max-width: 768px) {
         .left-visual, .right-visual {
             width: 120px;
             min-width: 120px;
             bottom: -10px;
-            opacity: 0.4; /* Fade background images so text is readable */
+            opacity: 0.3; /* Further faded for clarity */
         }
         
         .hero {
-            align-items: flex-end; /* Push card slightly down to show more background */
-            padding-bottom: 80px;
+            /* On mobile, we align to center but use margin-bottom to pull it up */
+            align-items: center; 
         }
 
         .glass-card {
             padding: 30px 20px;
             border-radius: 20px;
+            /* Lifted even higher on mobile to clear footer info */
+            margin-bottom: 15vh; 
         }
 
         .footer-info {
