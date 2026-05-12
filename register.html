@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Innovative OS</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Michroma&family=Orbitron:wght@400;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary: #004d40;
+            --accent: #00e676;
+            --error: #ff5252;
+            --bg-dark: #0f172a;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top left, var(--primary), var(--bg-dark));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #fff;
+            transition: opacity 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* Loader */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 55px;
+            height: 55px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .container {
+            display: flex;
+            width: 950px;
+            max-width: 95%;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            animation: fadeIn 0.8s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 20px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .left {
+            flex: 1;
+            background: var(--primary);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left h1 { 
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent); 
+            font-size: 28px; 
+            margin-bottom: 15px; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .left p { font-size: 14px; opacity: 0.8; line-height: 1.8; }
+
+        .right {
+            flex: 1.2;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(25px);
+            padding: 50px 40px;
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h2 { 
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0; 
+            font-weight: 700; 
+            margin-bottom: 25px; 
+            letter-spacing: 1px;
+            font-size: 22px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .input-group { margin-bottom: 20px; position: relative; }
+        .full-width { grid-column: span 2; }
+
+        .input-group label {
+            display: block;
+            font-family: 'Michroma', sans-serif;
+            font-size: 8px;
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            color: #fff;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.4s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 230, 118, 0.4);
+        }
+
+        /* CUSTOM SYSTEM ALERTS */
+        .swal-os-border {
+            border: 2px solid var(--accent) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.3) !important;
+        }
+
+        .swal-os-border-error {
+            border: 2px solid var(--error) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 0 30px rgba(255, 82, 82, 0.3) !important;
+        }
+
+        .swal-timer-bar { background: var(--accent) !important; height: 4px !important; }
+
+        .link { margin-top: 25px; font-size: 12px; text-align: center; opacity: 0.7; }
+        .link a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+        .credits { margin-top: 20px; font-size: 10px; text-align: center; opacity: 0.4; letter-spacing: 1px; }
+    </style>
+</head>
+
+<body>
+
+<div class="loader" id="loader">
+    <div class="spinner"></div>
+    <p style="margin-top:20px; font-family: 'Michroma', sans-serif; font-size:10px; letter-spacing:2px; color: var(--accent);">ENROLLMENT_UPLINK_INITIALIZING</p>
+</div>
+
+<div class="container">
+    <div class="left">
+        <span class="material-icons" style="font-size: 56px; color: var(--accent); margin-bottom: 25px;">how_to_reg</span>
+        <h1>Create Account</h1>
+        <p>Register your store unit to the Innovative OS Compliance network. Establish secure credentials for real-time monitoring.</p>
+    </div>
+
+    <div class="right">
+        <h2>Register System</h2>
+
+        <div class="input-grid">
+            <div class="input-group full-width">
+                <label>Store Name</label>
+                <input type="text" id="name" placeholder="e.g. Dumaguete Main Branch" spellcheck="false">
+            </div>
+
+            <div class="input-group">
+                <label>Store Code</label>
+                <input type="text" id="code" placeholder="Numbers only">
+            </div>
+
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="user" placeholder="Login ID" spellcheck="false">
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="pass" placeholder="••••••••">
+            </div>
+
+            <div class="input-group">
+                <label>Confirm Password</label>
+                <input type="password" id="confirmPass" placeholder="••••••••">
+            </div>
+        </div>
+
+        <button class="btn" onclick="register()">Create Account</button>
+
+        <div class="link">
+            Already a member of the network? <a href="login.html">Sign In</a>
+        </div>
+
+        <div class="credits">
+            Powered by Junzky with partnership of AI
+        </div>
+    </div>
+</div>
+
+<script>
+// 1. PASTE YOUR GOOGLE WEB APP URL HERE
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby6StZoPS1Nr3J-YiaCiBdwzu2oTUSiiS5aILsJyfAM1jqyycuU6Mmh-iUpprNr3sw/exec";
+
+window.onload = () => {
+    setTimeout(() => {
+        document.getElementById('loader').style.opacity = "0";
+        setTimeout(() => document.getElementById('loader').style.display="none", 500);
+    }, 800);
+};
+
+async function register() {
+    const store_name = document.getElementById('name').value.trim();
+    const store_code = document.getElementById('code').value.trim();
+    const username = document.getElementById('user').value.trim();
+    const password = document.getElementById('pass').value;
+    const confirmPass = document.getElementById('confirmPass').value;
+
+    // --- Validation Logic (Kept the same) ---
+    if (!store_name || !store_code || !username || !password || !confirmPass) {
+        Swal.fire({
+            title: '<span style="font-family: Orbitron; font-size: 18px;">PROTOCOL INCOMPLETE</span>',
+            html: `
+                <div style="padding: 15px; border: 1px solid rgba(0, 230, 118, 0.2); background: rgba(0,0,0,0.2); border-radius: 12px;">
+                    <p style="font-family: Michroma, sans-serif; font-size: 9px; color: var(--accent); margin-bottom: 10px; letter-spacing: 2px;">MISSING_DATA_NODES</p>
+                    <p style="font-family: Inter, sans-serif; font-size: 13px; opacity: 0.8;">
+                        Enrollment requires all mandatory fields to be synchronized. Please complete all data nodes before proceeding.
+                    </p>
+                </div>
+            `,
+            confirmButtonText: 'ACKNOWLEDGE',
+            confirmButtonColor: '#00e676',
+            background: '#0f172a', color: '#fff', width: '450px',
+            customClass: { popup: 'swal-os-border' }
+        });
+        return;
+    }
+
+    if (password !== confirmPass) {
+        Swal.fire({
+            title: '<span style="font-family: Orbitron; font-size: 18px; color: #ff5252;">SYNC ERROR</span>',
+            html: `
+                <div style="padding: 15px; border: 1px solid rgba(255, 82, 82, 0.2); background: rgba(255,0,0,0.05); border-radius: 12px;">
+                    <p style="font-family: Michroma, sans-serif; font-size: 9px; color: #ff5252; margin-bottom: 10px; letter-spacing: 2px;">PASSWORD_MISMATCH</p>
+                    <p style="font-family: Inter, sans-serif; font-size: 13px; opacity: 0.8;">
+                        The provided security credentials do not match. Please verify and re-synchronize passwords.
+                    </p>
+                </div>
+            `,
+            confirmButtonText: 'RETRY',
+            confirmButtonColor: '#ff5252',
+            background: '#0f172a', color: '#fff', width: '450px',
+            customClass: { popup: 'swal-os-border-error' }
+        });
+        return;
+    }
+
+    const btn = document.querySelector('.btn');
+    btn.disabled = true;
+    btn.innerText = "UPLOADING...";
+
+    try {
+        // --- UPDATED UPLINK TO GOOGLE SHEETS ---
+        const res = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Important for bypass on restricted PCs
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                action: 'register', 
+                store_name, 
+                store_code, 
+                username, 
+                password 
+            })
+        });
+
+        // Since we use 'no-cors', we show success if the fetch is sent
+        Swal.fire({
+            title: 'PROTOCOL SUCCESS',
+            html: `
+                <div style="padding: 15px; border: 1px solid rgba(0, 230, 118, 0.2); background: rgba(0,0,0,0.3); border-radius: 12px;">
+                    <p style="font-family: 'Michroma', sans-serif; font-size: 10px; color: var(--accent); margin-bottom: 12px; letter-spacing: 2px;">ENROLLMENT_COMPLETE</p>
+                    <h2 style="font-family: 'Orbitron', sans-serif; font-size: 16px; margin: 10px 0; color: #fff;">
+                        ${store_name.toUpperCase()} REGISTERED
+                    </h2>
+                </div>
+            `,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: '#0f172a', color: '#fff', width: '450px',
+            customClass: { popup: 'swal-os-border', timerProgressBar: 'swal-timer-bar' }
+        }).then(() => {
+            document.body.style.opacity = "0";
+            setTimeout(() => { window.location.href = "login.html"; }, 400);
+        });
+
+    } catch (err) {
+        Swal.fire({ 
+            title: 'UPLINK ERROR', 
+            text: "Connection to Cloud Database failed.", 
+            background: '#0f172a', color: '#fff',
+            customClass: { popup: 'swal-os-border-error' }
+        });
+    }
+
+    btn.disabled = false;
+    btn.innerText = "Create Account";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovative OS | Initialize</title>
+    <!-- Sophisticated Tech Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Orbitron:wght@400;800&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #004d40;
+            --accent: #00e676;
+            --bg-dark: #0f172a;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: radial-gradient(circle at top left, var(--primary), var(--bg-dark));
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            color: #fff;
+            transition: opacity 0.8s ease;
+        }
+
+        #bg-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            opacity: 0.35;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 3;
+            height: 100vh;
+            display: flex;
+            justify-content: center; 
+            align-items: center;
+        }
+
+        /* SIDE VISUALS */
+        .left-visual, .right-visual {
+            position: absolute;
+            bottom: -20px;
+            width: 320px; 
+            z-index: 2;
+            pointer-events: none;
+        }
+        .left-visual { left: -10px; animation: floatLeft 6s ease-in-out infinite; }
+        .right-visual { right: -10px; animation: floatRight 6s ease-in-out infinite; }
+
+        .left-visual img, .right-visual img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 0 25px rgba(0, 230, 118, 0.15));
+            opacity: 0.85;
+        }
+
+        @keyframes floatLeft { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(10px, -10px); } }
+        @keyframes floatRight { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-10px, -10px); } }
+
+        /* CENTERED GLASS INTERFACE */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 50px 70px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            animation: fadeInCenter 1.5s ease-out;
+        }
+
+        @keyframes fadeInCenter {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+
+        h1 span {
+            color: var(--accent);
+            text-shadow: 0 0 15px rgba(0, 230, 118, 0.5);
+        }
+
+        p {
+            font-family: 'Michroma', sans-serif;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 9px;
+            margin: 20px 0 40px;
+            line-height: 2;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* MOVING BAR BUTTON */
+        .enter-btn {
+            position: relative;
+            padding: 18px 50px;
+            background: rgba(0, 230, 118, 0.05);
+            color: var(--accent);
+            text-decoration: none;
+            border-radius: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: inline-block;
+            cursor: pointer;
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            overflow: hidden; /* Important for the moving bar */
+            transition: all 0.4s ease;
+        }
+
+        /* The "Moving Bar" inside the button */
+        .enter-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg, 
+                transparent, 
+                rgba(0, 230, 118, 0.2), 
+                transparent
+            );
+            animation: scan 3s infinite linear;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .enter-btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* PROGRESS BAR STYLING */
+        #progress-container {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .progress-label-wrap {
+            display: flex;
+            justify-content: space-between;
+            font-family: monospace;
+            font-size: 10px;
+            color: var(--accent);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #progress-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+            transition: width 0.2s ease-out;
+        }
+
+        .footer-info {
+            position: absolute;
+            bottom: 30px;
+            text-align: center;
+            width: 100%;
+            z-index: 5;
+        }
+
+        .sys-code {
+            font-family: monospace;
+            font-size: 9px;
+            color: var(--accent);
+            opacity: 0.5;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="left-visual">
+        <img src="image_db6ab6.png" alt="AI Core">
+    </div>
+
+    <div class="right-visual">
+        <img src="image_db6ab6_2.png" alt="Male AI Node">
+    </div>
+
+    <div class="hero">
+        <div class="glass-card">
+            <div style="font-family: 'Michroma', sans-serif; font-size: 8px; color: var(--accent); letter-spacing: 5px; margin-bottom: 5px;">PROTOCOL_INITIALIZE</div>
+            <h1>INNOVATIVE<span>OS</span></h1>
+            <p>Compliance & Acquisition Management<br>Secure Infrastructure V1</p>
+            
+            <div id="action-wrapper">
+                <a href="login.html" class="enter-btn" id="start-init">Initialize System</a>
+            </div>
+
+            <div id="progress-container">
+                <div class="progress-label-wrap">
+                    <span id="status-text">BOOTING_CORE...</span>
+                    <span id="percent-text">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div id="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-info">
+        <div class="sys-code">STATUS: ENCRYPTED // Data localized to internal storage protocol</div>
+        <div style="font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 8px;">Powered by Junzky with partnership of AI</div>
+    </div>
+
+    <script>
+        // Canvas Animation
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let lines = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        
+        class DataStream {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * -canvas.height;
+                this.length = Math.random() * 120 + 40;
+                this.speed = Math.random() * 2.5 + 1.5;
+                this.width = Math.random() * 1.5 + 0.5;
+                this.opacity = Math.random() * 0.4 + 0.1;
+            }
+            draw() {
+                ctx.beginPath();
+                let grad = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.length);
+                grad.addColorStop(0, 'transparent');
+                grad.addColorStop(1, `rgba(0, 230, 118, ${this.opacity})`);
+                ctx.strokeStyle = grad; ctx.lineWidth = this.width;
+                ctx.moveTo(this.x, this.y); ctx.lineTo(this.x, this.y + this.length); ctx.stroke();
+                this.y += this.speed; if (this.y > canvas.height) this.reset();
+            }
+        }
+        
+        function init() { lines = []; for(let i=0; i<60; i++) lines.push(new DataStream()); }
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); lines.forEach(l => l.draw()); requestAnimationFrame(animate); }
+        window.addEventListener('resize', resize);
+        resize(); init(); animate();
+
+        // Progress Logic
+        const startBtn = document.getElementById('start-init');
+        const actionWrapper = document.getElementById('action-wrapper');
+        const progressContainer = document.getElementById('progress-container');
+        const progressFill = document.getElementById('progress-fill');
+        const percentText = document.getElementById('percent-text');
+        const statusText = document.getElementById('status-text');
+
+        startBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetUrl = this.getAttribute('href');
+
+            actionWrapper.style.display = 'none';
+            progressContainer.style.display = 'block';
+
+            let width = 0;
+            const statusMessages = ["MOUNTING...", "DECRYPTING...", "UPLINKING...", "READY"];
+
+            const loadingInterval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(loadingInterval);
+                    document.body.style.opacity = '0';
+                    setTimeout(() => { window.location.href = targetUrl; }, 600);
+                } else {
+                    width += Math.floor(Math.random() * 10) + 2;
+                    if (width > 100) width = 100;
+                    progressFill.style.width = width + '%';
+                    percentText.innerText = width + '%';
+                    if (width > 80) statusText.innerText = statusMessages[3];
+                    else if (width > 50) statusText.innerText = statusMessages[2];
+                    else if (width > 20) statusText.innerText = statusMessages[1];
+                }
+            }, 150); 
+        });
+    </script>
+</body>
+</html>

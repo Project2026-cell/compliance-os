@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Innovative OS</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Michroma&family=Orbitron:wght@400;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root { 
+            --primary: #004d40; 
+            --accent: #00e676; 
+            --error: #ff5252;
+            --bg-dark: #0f172a; 
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top left, var(--primary), var(--bg-dark));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            transition: opacity 0.5s ease;
+            overflow: hidden;
+        }
+
+        /* Initial Page Loader */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 55px;
+            height: 55px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .container {
+            display: flex;
+            width: 900px;
+            max-width: 95%;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            animation: fadeIn 0.8s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .left {
+            flex: 1;
+            background: var(--primary);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left h1 { 
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent); 
+            font-size: 28px; 
+            margin-bottom: 10px; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .left p { font-size: 14px; opacity: 0.8; line-height: 1.6; }
+
+        .right {
+            flex: 1;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(25px);
+            padding: 60px 40px;
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h2 { 
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 0; 
+            font-weight: 700; 
+            margin-bottom: 30px; 
+            letter-spacing: 1px;
+        }
+
+        .input-group { margin-bottom: 25px; position: relative; }
+
+        .input-group label {
+            display: block;
+            font-family: 'Michroma', sans-serif;
+            font-size: 9px;
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            color: #fff;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:-webkit-autofill {
+            -webkit-text-fill-color: white !important;
+            -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
+        }
+
+        .toggle-pass {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.4s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 230, 118, 0.4);
+        }
+
+        /* CUSTOM SYSTEM ALERTS */
+        .swal-os-border {
+            border: 2px solid var(--accent) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.3) !important;
+        }
+
+        .swal-os-border-error {
+            border: 2px solid var(--error) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 0 30px rgba(255, 82, 82, 0.3) !important;
+        }
+
+        .swal-timer-bar { background: var(--accent) !important; height: 4px !important; }
+
+        .link { margin-top: 30px; font-size: 12px; text-align: center; opacity: 0.7; line-height: 1.8; }
+        .link a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .link a:hover { text-decoration: underline; }
+
+        .credits { margin-top: 25px; font-size: 10px; text-align: center; opacity: 0.4; letter-spacing: 1px; }
+    </style>
+</head>
+
+<body>
+
+<div class="loader" id="loader">
+    <div class="spinner"></div>
+    <p style="margin-top:20px; font-family: Michroma, sans-serif; font-size:10px; letter-spacing:2px; color: var(--accent);">SECURE_ACCESS_INITIALIZING</p>
+</div>
+
+<div class="container">
+    <div class="left">
+        <span class="material-icons" style="font-size: 56px; color: var(--accent); margin-bottom: 25px;">security</span>
+        <h1>Welcome Back</h1>
+        <p>Access your Store Compliance & Acquisition Portal. Please verify your credentials to continue to the system dashboard.</p>
+    </div>
+
+    <div class="right">
+        <h2>Sign In</h2>
+
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="user" placeholder="Enter your ID" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="pass" placeholder="••••••••" autocomplete="new-password">
+            <span class="material-icons toggle-pass" onclick="togglePassword()">visibility_off</span>
+        </div>
+
+        <button class="btn" onclick="login()">Sign In</button>
+
+        <div class="link">
+            Unauthorized access is strictly prohibited. <br>
+            <span style="opacity: 0.6;">Forgot credentials?</span> 
+            <a href="javascript:void(0)" onclick="forgotPasswordAlert()">Request Manual Reset</a>
+            <br>
+            New Staff? <a href="register.html">Register Account</a>
+        </div>
+
+        <div class="credits">
+            Powered by Junzky with partnership of AI
+        </div>
+    </div>
+</div>
+
+<script>
+// 1. PASTE YOUR GOOGLE WEB APP URL HERE
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby6StZoPS1Nr3J-YiaCiBdwzu2oTUSiiS5aILsJyfAM1jqyycuU6Mmh-iUpprNr3sw/exec";
+
+window.onload = () => {
+    // Clear any old fields and hide loader
+    setTimeout(() => {
+        document.getElementById('user').value = "";
+        document.getElementById('pass').value = "";
+    }, 10);
+
+    setTimeout(() => {
+        document.getElementById('loader').style.opacity = "0";
+        setTimeout(() => document.getElementById('loader').style.display="none", 500);
+    }, 800);
+};
+
+function togglePassword() {
+    const passInput = document.getElementById('pass');
+    const icon = document.querySelector('.toggle-pass');
+    if (passInput.type === "password") {
+        passInput.type = "text";
+        icon.innerText = "visibility";
+    } else {
+        passInput.type = "password";
+        icon.innerText = "visibility_off";
+    }
+}
+
+async function login(){
+    const username = document.getElementById('user').value.trim();
+    const password = document.getElementById('pass').value;
+
+    if(!username || !password){
+        Swal.fire({
+            title: 'PROTOCOL WARNING',
+            text: "Please enter both credentials.",
+            background: '#0f172a', color: '#fff', confirmButtonColor: '#00e676',
+            customClass: { popup: 'swal-os-border' }
+        });
+        return;
+    }
+
+    const btn = document.querySelector('.btn');
+    btn.disabled = true;
+    btn.innerText = "VERIFYING...";
+
+    try {
+        // --- UPLINK TO GOOGLE SHEETS ---
+        const res = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ 
+                action: 'login', 
+                username: username, 
+                password: password 
+            })
+        });
+
+        const data = await res.json();
+
+        if(data.success){
+            // Store session data for the dashboard
+            localStorage.setItem("username", data.username);
+            localStorage.setItem("store_name", data.store_name);
+            localStorage.setItem("store_code", data.store_code);
+
+            Swal.fire({
+                title: 'SYSTEM ACCESS GRANTED',
+                html: `
+                    <div style="padding: 15px; border: 1px solid rgba(0, 230, 118, 0.2); background: rgba(0,0,0,0.3); border-radius: 12px;">
+                        <p style="font-family: 'Michroma', sans-serif; font-size: 10px; color: var(--accent); margin-bottom: 12px; letter-spacing: 2px;">IDENTITY_VERIFIED</p>
+                        <h2 style="font-family: 'Orbitron', sans-serif; font-size: 18px; margin: 10px 0; color: #fff;">WELCOME BACK, ${data.username.toUpperCase()}</h2>
+                        <p style="font-size: 12px; opacity: 0.7;">Terminal: ${data.store_name}</p>
+                    </div>
+                `,
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                background: '#0f172a', color: '#fff', width: '450px',
+                customClass: { popup: 'swal-os-border', timerProgressBar: 'swal-timer-bar' }
+            }).then(() => {
+                document.body.style.opacity = "0";
+                setTimeout(() => window.location.href = "index.html", 400);
+            });
+
+        } else {
+            Swal.fire({
+                title: '<span style="color: #ff5252; font-family: Orbitron;">ACCESS DENIED</span>',
+                text: data.message || "Invalid credentials provided.",
+                background: '#0f172a', color: '#fff',
+                customClass: { popup: 'swal-os-border-error' }
+            });
+        }
+    } catch (err) {
+        Swal.fire({ 
+            title: 'UPLINK ERROR', 
+            text: "Connection to cloud database failed.", 
+            background: '#0f172a', color: '#fff',
+            customClass: { popup: 'swal-os-border-error' }
+        });
+    }
+    btn.disabled = false;
+    btn.innerText = "Sign In";
+}
+
+function forgotPasswordAlert() {
+    Swal.fire({
+        title: 'RECOVERY PROTOCOL',
+        text: "Contact System Administrator for manual reset.",
+        background: '#0f172a', color: '#fff', confirmButtonColor: '#00e676',
+        customClass: { popup: 'swal-os-border' }
+    });
+}
+</script>
+
+</body>
+</html>
