@@ -226,7 +226,59 @@
             padding-top: 20px;
         }
     }
-</style>
+
+    /* 1. Global Reset to kill all accidental borders */
+* { 
+    box-sizing: border-box; 
+    outline: none !important; /* Removes focus rings */
+    border: none; /* Globally removes borders unless specified */
+}
+
+/* 2. Re-apply border ONLY to the elements that need it */
+.glass-card {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.enter-btn {
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.progress-track {
+    /* Set background without border to prevent the "line" effect */
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* 3. FIX FOR THE BOTTOM LINE: Clean the Footer */
+.footer-info {
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    width: 100%;
+    z-index: 5;
+    padding: 0 20px;
+    /* Ensure NO background color or border at all */
+    background: transparent !important;
+    border: none !important;
+}
+
+/* 4. Fix AI Image seams */
+.left-visual img, .right-visual img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 25px rgba(0, 230, 118, 0.15));
+    opacity: 0.3;
+    /* This prevents a line appearing at the bottom of the image */
+    display: block;
+}
+
+/* 5. Force the Canvas to cover the full viewport perfectly */
+#bg-canvas {
+    position: fixed; /* Changed from absolute to fixed */
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 1;
+    opacity: 0.35;
+}
     </style>
 </head>
 <body>
