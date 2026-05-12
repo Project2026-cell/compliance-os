@@ -843,16 +843,20 @@ body.dark .kpi-icon {
     transition: 0.3s ease;
 }
 
+
+
 /* --- COMPREHENSIVE MOBILE UI FIX --- */
 @media (max-width: 1024px) {
-    /* 1. Sidebar becomes a hidden drawer */
+    /* 1. FORCE SIDEBAR TO THE LEFT */
     #sidebar {
-        left: -260px !important;
-        width: 260px !important;
-        z-index: 10001 !important; /* Above everything */
-        transition: 0.3s ease;
+        left: -280px !important; /* Start off-screen on the left */
+        right: auto !important;  /* Ensure it is NOT anchored to the right */
+        width: 280px !important;
+        position: fixed !important;
+        z-index: 10001 !important;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    #sidebar.mobile-active {
+     #sidebar.mobile-active {
         left: 0 !important;
     }
 
@@ -864,8 +868,9 @@ body.dark .kpi-icon {
     /* 3. Top Nav: Stack dropdowns */
     #topnav {
         left: 0 !important;
+        width: 100% !important;
         height: auto !important;
-        padding: 10px !important;
+        padding: 10px 15px !important;
         flex-direction: column !important;
     }
 
@@ -882,19 +887,18 @@ body.dark .kpi-icon {
 
     /* 4. Main Content: Margin adjustment for taller nav */
     #main {
-        margin: 140px 10px 20px 10px !important;
+         margin: 150px 10px 20px 10px !important;
         padding: 0 !important;
     }
 
     /* 5. THE FIX FOR OVERLAP: Move Right Panel to Bottom */
     #rightPanel {
-        position: relative !important; /* No longer floating */
+       position: relative !important; /* Flow naturally at the bottom */
         top: 0 !important;
         right: 0 !important;
         width: 100% !important;
         height: auto !important;
         margin-top: 30px;
-        padding: 10px !important;
         z-index: 1;
     }
 
@@ -919,163 +923,22 @@ body.dark .kpi-icon {
     }
     
     .full-width { grid-column: auto; }
-}
-/* --- MOBILE UI OPTIMIZATION --- */
-@media (max-width: 1024px) {
-    /* 1. Sidebar becomes a slide-out drawer */
-    #sidebar {
-        left: -260px; /* Hidden off-screen */
-        z-index: 10000;
-        transition: 0.3s ease;
-    }
-    #sidebar.mobile-open {
-        left: 0; /* Slide in */
-    }
 
-    /* 2. Content fills the whole screen */
-    #main { margin: 80px 10px 20px 10px !important; }
-    #topnav { left: 0 !important; width: 100% !important; }
-
-    /* 3. Stack KPI Cards vertically */
-    .kpis { grid-template-columns: 1fr !important; }
-
-    /* 4. Hide Right Panel (move to bottom) */
-    #rightPanel {
-        position: static; width: 100%; margin-top: 20px;
-    }
-}
-
-/* ==========================================
-   FINAL CONSOLIDATED MOBILE UI (1024px and below)
-   ========================================== */
-@media (max-width: 1024px) {
-    /* 1. SIDEBAR: Becomes a Slide-out Drawer */
-    #sidebar {
-        left: -280px !important; /* Hide off-screen */
-        width: 280px !important;
-        z-index: 10001 !important; /* Above everything */
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 10px 0 30px rgba(0,0,0,0.3);
-    }
-    
-    /* Logic to slide the sidebar in */
-    #sidebar.mobile-active {
-        transform: translateX(280px);
-    }
-
-    /* 2. TOP NAV: Multi-row stacking */
-    #topnav {
-        left: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        padding: 10px 15px !important;
-        flex-direction: column !important;
-        gap: 12px;
-    }
-
-    /* Show Burger Menu Button (Ensure this ID is in your HTML) */
-    #mobileMenuBtn {
-        display: block !important;
-    }
-
+    /* 5. FIX DROPDOWNS: Make them tap-friendly */
     .header-container {
-        width: 100%;
+        display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 8px;
-    }
-
-    /* Responsive Inputs for Fingers */
-    #storeSelector, #datePicker, #weekPicker {
-        flex: 1 1 45%; /* Two per row */
-        height: 40px !important;
-        font-size: 11px !important;
-        min-width: 120px;
-    }
-
-    .export-container {
-        width: 100%;
+        gap: 10px;
         justify-content: center;
-        gap: 15px;
     }
 
-    #title { display: none; } /* Hide title to save vertical space */
-
-    /* 3. MAIN CONTENT: Pushed down to clear the taller Nav */
-    #main {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        margin-top: 145px !important; /* Adjust based on your Nav height */
-        padding: 15px !important;
-    }
-
-    /* 4. THE OVERLAP FIX: Move Right Panel to the BOTTOM */
-    #rightPanel {
-        position: relative !important; /* Flows after the charts */
-        top: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        margin-top: 30px;
-        padding: 10px 0 !important;
-        z-index: 1;
-    }
-
-    .widget {
-        margin-bottom: 20px;
-        transform: none !important; /* Disable hover lift on mobile */
-    }
-
-    /* 5. CARD STACKING: 1 Column */
-    .kpis {
-        grid-template-columns: 1fr !important;
-        gap: 15px;
-    }
-
-    .acquisition-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    /* 6. FLOATING FORM: Mobile App Style */
-    .floating-card {
-        width: 95% !important;
-        padding: 25px 20px !important;
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-
-    .modal-grid {
-        grid-template-columns: 1fr !important; /* Single column */
-        gap: 15px;
-    }
-
-    .full-width {
-        grid-column: auto;
-    }
-
-    #submitBtn {
-        padding: 18px !important; /* Larger hit area */
-    }
-
-    /* 7. Bottom Navigation Area */
-    .nav-right {
-        width: 100%;
-        justify-content: space-around;
-        padding: 10px 0;
-        border-top: 1px solid rgba(255,255,255,0.1);
+    #storeSelector, #datePicker, #weekPicker {
+        flex: 1 1 40%; /* 2 per row */
+        min-width: 140px;
+        height: 45px !important;
     }
 }
 
-/* Background Blur Overlay (Add to HTML body) */
-#sidebar-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.5);
-    z-index: 10000;
-    backdrop-filter: blur(4px);
-}
 </style>
 </head>
 
@@ -1723,14 +1586,12 @@ function toggleSidebar() {
     const overlay = document.getElementById('sidebar-overlay');
     
     if (window.innerWidth <= 1024) {
-        // Mobile behavior: Slide in/out
+        // Mobile Logic
         const isOpen = sidebar.classList.toggle('mobile-active');
-        overlay.style.display = isOpen ? 'block' : 'none';
-        
-        // Block scrolling on the dashboard when menu is open
+        if (overlay) overlay.style.display = isOpen ? 'block' : 'none';
         document.body.style.overflow = isOpen ? 'hidden' : 'auto';
     } else {
-        // Desktop behavior: Standard collapse
+        // Desktop Logic
         sidebar.classList.toggle('collapsed');
     }
 }
