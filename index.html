@@ -945,68 +945,88 @@ body.dark .kpi-icon {
     }
 }
 
-/* --- COMPREHENSIVE MOBILE UI FIX --- */
+/* ==========================================
+   FINAL CONSOLIDATED MOBILE UI (1024px and below)
+   ========================================== */
 @media (max-width: 1024px) {
-    /* 1. Sidebar becomes a hidden drawer */
+    /* 1. SIDEBAR: Becomes a Slide-out Drawer */
     #sidebar {
-        left: -260px !important;
-        width: 260px !important;
-        z-index: 10000 !important;
-        transition: 0.3s ease;
+        left: -280px !important; /* Hide off-screen */
+        width: 280px !important;
+        z-index: 10001 !important; /* Above everything */
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.3);
     }
+    
+    /* Logic to slide the sidebar in */
     #sidebar.mobile-active {
-        left: 0 !important;
+        transform: translateX(280px);
     }
 
-    /* 2. Top Nav: Stack the dropdowns so they don't overlap */
+    /* 2. TOP NAV: Multi-row stacking */
     #topnav {
         left: 0 !important;
         width: 100% !important;
         height: auto !important;
-        padding: 10px !important;
+        padding: 10px 15px !important;
         flex-direction: column !important;
-        gap: 10px;
+        gap: 12px;
+    }
+
+    /* Show Burger Menu Button (Ensure this ID is in your HTML) */
+    #mobileMenuBtn {
+        display: block !important;
     }
 
     .header-container {
+        width: 100%;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-between;
         gap: 8px;
     }
 
+    /* Responsive Inputs for Fingers */
     #storeSelector, #datePicker, #weekPicker {
-        width: 45% !important; /* Two per row on mobile */
-        font-size: 10px !important;
+        flex: 1 1 45%; /* Two per row */
+        height: 40px !important;
+        font-size: 11px !important;
+        min-width: 120px;
     }
 
     .export-container {
         width: 100%;
         justify-content: center;
+        gap: 15px;
     }
 
-    /* 3. Main Content: Adjust margin to clear the taller stacked topnav */
+    #title { display: none; } /* Hide title to save vertical space */
+
+    /* 3. MAIN CONTENT: Pushed down to clear the taller Nav */
     #main {
         margin-left: 0 !important;
         margin-right: 0 !important;
-        margin-top: 140px !important; /* Pushes content below stacked nav */
+        margin-top: 145px !important; /* Adjust based on your Nav height */
         padding: 15px !important;
     }
 
-    /* 4. THE CRITICAL FIX: Move Right Panel to the BOTTOM */
+    /* 4. THE OVERLAP FIX: Move Right Panel to the BOTTOM */
     #rightPanel {
-        position: relative !important; /* Removes 'fixed' overlap */
+        position: relative !important; /* Flows after the charts */
         top: 0 !important;
         right: 0 !important;
         width: 100% !important;
         height: auto !important;
-        padding: 10px !important;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
+        margin-top: 30px;
+        padding: 10px 0 !important;
         z-index: 1;
     }
 
-    /* 5. Stacking KPI cards */
+    .widget {
+        margin-bottom: 20px;
+        transform: none !important; /* Disable hover lift on mobile */
+    }
+
+    /* 5. CARD STACKING: 1 Column */
     .kpis {
         grid-template-columns: 1fr !important;
         gap: 15px;
@@ -1016,23 +1036,51 @@ body.dark .kpi-icon {
         grid-template-columns: 1fr !important;
     }
 
-    /* 6. Fix for Header Title visibility */
-    #title {
-        display: none; /* Hide 'Dashboard Overview' to save space on mobile */
+    /* 6. FLOATING FORM: Mobile App Style */
+    .floating-card {
+        width: 95% !important;
+        padding: 25px 20px !important;
+        max-height: 90vh;
+        overflow-y: auto;
     }
-    
+
+    .modal-grid {
+        grid-template-columns: 1fr !important; /* Single column */
+        gap: 15px;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
+
+    #submitBtn {
+        padding: 18px !important; /* Larger hit area */
+    }
+
+    /* 7. Bottom Navigation Area */
     .nav-right {
         width: 100%;
         justify-content: space-around;
+        padding: 10px 0;
         border-top: 1px solid rgba(255,255,255,0.1);
-        padding-top: 8px;
     }
 }
 
+/* Background Blur Overlay (Add to HTML body) */
+#sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 10000;
+    backdrop-filter: blur(4px);
+}
 </style>
 </head>
 
 <body>
+    <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <div id="sidebar">
  <div class="sidebar-top">
@@ -1671,14 +1719,22 @@ function autoLogoutNotify() {
 
 function logout() { localStorage.clear(); document.body.style.opacity = "0"; setTimeout(() => { window.location.href = "landing.html"; }, 300); }
 function toggleSidebar() {
-   const sidebar = document.getElementById('sidebar');
-    // Check if we are on a mobile/tablet screen
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    
     if (window.innerWidth <= 1024) {
-        sidebar.classList.toggle('mobile-active'); // Slide in from left
+        // Mobile behavior: Slide in/out
+        const isOpen = sidebar.classList.toggle('mobile-active');
+        overlay.style.display = isOpen ? 'block' : 'none';
+        
+        // Block scrolling on the dashboard when menu is open
+        document.body.style.overflow = isOpen ? 'hidden' : 'auto';
     } else {
-        sidebar.classList.toggle('collapsed'); // Just shrink the width
+        // Desktop behavior: Standard collapse
+        sidebar.classList.toggle('collapsed');
     }
 }
+
 function toggleSubmenu(e, id) { e.stopPropagation(); document.getElementById('sidebar').classList.remove('collapsed'); document.getElementById(id).classList.toggle('open'); }
 function toggleLivelyWidget() { document.getElementById('activityViewport').classList.toggle('is-expanded'); }
 function toggleSingleWidget(id) { document.getElementById(id).classList.toggle('expanded'); }
