@@ -1382,7 +1382,7 @@ body.dark .kpi-icon {
    // ==========================================
 // 1. GLOBAL SETTINGS & STATE
 // ==========================================
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhDs8MLx-TDUQOpThjtktUYFr7_S7T0d4afl5lLHwK7kjSLklBd799IoQghsbmaAH2/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIoy_LpycRDbjkzTw9NvuhmKPDwjGscko8R0Du89kb3eUaI-Mrba4yjux5fRiToRWv/exec";
 
 // --- MANILA TIMEZONE HELPERS ---
 function getPHDate() {
@@ -1447,24 +1447,45 @@ async function updateDashboardData() {
         }
 
         // --- KPI 3: WEEKLY ACQUISITION (Goal: 450) ---
+    // --- KPI 3: WEEKLY ACQUISITION & GROWTH ---
         const isOverall = week === "Overall";
-        const target = isOverall ? 1800 : 450;
         const weekActual = s.kpis.weekActual || 0;
         const weekLast = s.kpis.weekLast || 0;
-        const weekBudgetPct = Math.round((weekActual / target) * 100);
-        const weekColor = weekBudgetPct >= 100 ? 'var(--accent-green)' : '#ff5252';
-        const weekGrowth = weekLast === 0 ? 0 : Math.round(((weekActual - weekLast) / weekLast) * 100);
+        const selectedWeek = document.getElementById('weekPicker').value;
 
+        // Update the Main Number
         document.getElementById('avg').textContent = weekActual.toLocaleString();
-        const wBudget = document.getElementById('weekBudget');
-        if (wBudget) {
-            wBudget.style.color = weekColor;
-            wBudget.innerHTML = `<b>${weekBudgetPct}%</b> to ${isOverall ? 'Total' : 'Budget'}`;
+
+        // 1. Percentage to Budget (Target: 450)
+        // If "Overall" is selected, target becomes 1800
+        const target = (selectedWeek === "Overall") ? 1800 : 450;
+        const budgetPct = Math.round((weekActual / target) * 100);
+        
+        const budgetEl = document.getElementById('weekBudget');
+        if (budgetEl) {
+            budgetEl.style.color = budgetPct >= 100 ? 'var(--accent-green)' : '#ff5252';
+            budgetEl.innerHTML = `<b>${budgetPct}%</b> to Budget`;
         }
-        const wComp = document.getElementById('weeklyComp');
-        if (wComp) {
-            wComp.style.color = weekGrowth >= 0 ? 'var(--accent-green)' : '#ff5252';
-            wComp.innerHTML = `<span class="material-icons" style="font-size:12px">${weekGrowth >= 0 ? 'arrow_upward' : 'arrow_downward'}</span> ${Math.abs(weekGrowth)}% vs Last Week`;
+
+        // 2. Growth Comparison Logic (Fixes the 100% bug)
+        const weekCompEl = document.getElementById('weeklyComp');
+        if (weekCompEl) {
+            if (weekLast > 0) {
+                // Real comparison if last week has data
+                const weekGrowth = Math.round(((weekActual - weekLast) / weekLast) * 100);
+                const gColor = weekGrowth >= 0 ? 'var(--accent-green)' : '#ff5252';
+                const gIcon = weekGrowth >= 0 ? 'arrow_upward' : 'arrow_downward';
+                
+                weekCompEl.style.color = gColor;
+                weekCompEl.innerHTML = `<span class="material-icons" style="font-size:12px">${gIcon}</span> ${Math.abs(weekGrowth)}% vs Last Week`;
+            } else if (weekActual > 0) {
+                // If last week was 0, show this instead of "100%"
+                weekCompEl.style.color = 'var(--accent-blue)';
+                weekCompEl.innerHTML = `<span class="material-icons" style="font-size:12px">star</span> New Growth Cycle`;
+            } else {
+                weekCompEl.style.color = '#94a3b8';
+                weekCompEl.innerHTML = `No data recorded`;
+            }
         }
 
         // --- REFRESH RANKINGS & TREND ---
@@ -1877,7 +1898,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
 
    
    </script>
