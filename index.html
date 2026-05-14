@@ -1185,11 +1185,18 @@ body.dark .kpi-icon {
  <div class="nav-right">
    <a id="formsLink" onclick="openForm()" style="color:white; cursor:pointer; font-size:13px; font-weight:600; text-decoration:none; margin-right:20px;">Forms</a>
    
+ <div style="position: relative; cursor: pointer; margin-right: 15px;" onclick="openNotifications()">
+        <span class="material-icons" style="color: white; font-size: 24px;">notifications</span>
+        <span id="notifBadge" style="position: absolute; top: -5px; right: -5px; background: var(--accent-green); color: var(--primary-teal); font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 10px; display: none;">0</span>
+    </div>
+
    <div id="userBox" style="color: var(--accent-green); font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px;">
        <span class="material-icons" style="font-size: 18px;">account_circle</span>
        <!-- THIS ID IS FOR THE NAME -->
        <span id="display-user">Loading...</span>
    </div>
+
+   
 
    <!-- THIS ID IS FOR THE THEME TOGGLE -->
    <button onclick="toggleTheme()" id="themeBtn" class="material-icons" style="background:none; border:none; color:white; cursor:pointer; font-size:22px; margin-left:15px;">dark_mode</button>
@@ -1374,6 +1381,41 @@ body.dark .kpi-icon {
         </div>
 
         <button id="submitBtn" onclick="submitAcquisitionForm()">SUBMIT DATA</button>
+    </div>
+</div>
+
+<!-- NOTIFICATION CENTER OVERLAY -->
+<div id="notifOverlay" style="position:fixed; inset:0; background:rgba(15,23,42,0.7); backdrop-filter:blur(10px); z-index:8000; display:none; justify-content:center; align-items:center;">
+    <div class="floating-card" style="width:95%; max-width:450px; max-height:85vh; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="font-family:'Orbitron'; font-size:16px; color:var(--primary-teal); margin:0;">SYSTEM NOTIFICATIONS</h2>
+            <span class="material-icons" onclick="closeNotifications()" style="cursor:pointer; color:var(--text-muted);">close</span>
+        </div>
+
+        <!-- Section 1: Recent Activity -->
+        <div class="notif-section">
+            <h4 class="widget-title"><span class="material-icons">history</span> Recent Logs</h4>
+            <ul id="notifRecentList" class="scrolling-list" style="animation:none !important;"></ul>
+        </div>
+
+        <!-- Section 2: Pending Store Tasks -->
+        <div class="notif-section" style="margin-top:20px;">
+            <h4 class="widget-title"><span class="material-icons">store</span> Store Tasks</h4>
+            <ul id="notifPendingList" style="list-style:none; padding:0; margin:10px 0;">
+                <!-- Placeholder for dynamic tasks -->
+                <li style="padding:10px 35px; font-size:11px; color:var(--text-dark); border-bottom:1px solid rgba(0,0,0,0.05);">
+                    <span class="status-bullet bullet-orange"></span> Pending Gapcheck: Store #0355
+                </li>
+            </ul>
+        </div>
+
+        <!-- Section 3: Advisories -->
+        <div class="notif-section" style="margin-top:20px;">
+            <h4 class="widget-title"><span class="material-icons">campaign</span> Advisories</h4>
+            <div id="notifAdvisoryBox" style="padding:15px 35px; background:rgba(33,150,243,0.05); border-radius:15px; font-size:11px;">
+                <b>System Update:</b> Manila Timezone protocol successfully deployed.
+            </div>
+        </div>
     </div>
 </div>
 
@@ -1898,6 +1940,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// --- NOTIFICATION CONTROL ---
+function openNotifications() {
+    document.getElementById('notifOverlay').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    
+    // Copy the latest logs into the notification modal
+    const mainList = document.getElementById('recentUpdates');
+    const modalList = document.getElementById('notifRecentList');
+    if(mainList && modalList) {
+        modalList.innerHTML = mainList.innerHTML;
+        // Stop animation in modal
+        modalList.style.animation = "none";
+        modalList.style.transform = "none";
+    }
+}
+
+function closeNotifications() {
+    document.getElementById('notifOverlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Update the Bell Count
+function updateNotifBadge(count) {
+    const badge = document.getElementById('notifBadge');
+    if (count > 0) {
+        badge.innerText = count > 99 ? '99+' : count;
+        badge.style.display = 'block';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+// Modify your updateRecentActivity to update the badge
+async function updateRecentActivity() {
+    try {
+        const response = await fetch(SCRIPT_URL + "?action=recent-activity");
+        rawActivities = await response.json();
+        
+        // Update the Badge (Counting real logs + 1 for the static Advisory)
+        updateNotifBadge(rawActivities.length + 1);
+
+        renderActivityList();
+    } catch (e) { console.error(e); }
+}
 
    
    </script>
