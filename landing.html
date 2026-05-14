@@ -2,317 +2,185 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Innovative OS | Initialize</title>
-    <!-- Sophisticated Tech Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Orbitron:wght@400;800&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     <style>
-    :root {
-        --primary: #004d40;
-        --accent: #00e676;
-        --bg-dark: #0f172a;
-    }
-
-    * { box-sizing: border-box; }
-
-    /* 1. Force the page to stay exactly the size of the window */
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    /* THE FIX: Stop the bounce/swipe gap */
-    overflow: hidden; 
-    overscroll-behavior: none; 
-    position: fixed; /* Prevents the body from moving at all */
-}
-
-body {
-    /* Set a fallback solid color so there is never a "white" gap */
-    background-color: #0f172a; 
-    /* The real background */
-    background: radial-gradient(circle at top left, var(--primary), var(--bg-dark)) no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-}
-
-/* 2. Lock the Canvas to the background */
-#bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1;
-    opacity: 0.35;
-    pointer-events: none; /* Important: Touch goes through it to buttons */
-}
-
-/* 3. Ensure the Hero fills the screen but doesn't scroll */
-.hero {
-    position: fixed; /* Changed from relative */
-    top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    touch-action: none; /* Disables swiping on the center area */
-}
-
-    /* --- SIDE VISUALS --- */
-    .left-visual, .right-visual {
-        position: absolute;
-        bottom: -20px;
-        width: 25vw;
-        min-width: 200px;
-        z-index: 2;
-        pointer-events: none;
-    }
-    .left-visual { left: -10px; animation: floatLeft 6s ease-in-out infinite; }
-    .right-visual { right: -10px; animation: floatRight 6s ease-in-out infinite; }
-
-    .left-visual img, .right-visual img {
-        width: 100%;
-        height: auto;
-        filter: drop-shadow(0 0 25px rgba(0, 230, 118, 0.15));
-        opacity: 0.85;
-    }
-
-    @keyframes floatLeft { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(10px, -10px); } }
-    @keyframes floatRight { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-10px, -10px); } }
-
-    /* --- THE CARD: Lifted Position --- */
-    .glass-card {
-        background: rgba(255, 255, 255, 0.02);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        padding: 40px;
-        border-radius: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-        width: 100%;
-        max-width: 420px;
-        text-align: center;
-        animation: fadeInCenter 1.5s ease-out;
-        
-        /* THIS LIFTS THE CARD UP */
-        margin-bottom: 12vh; 
-    }
-
-    @keyframes fadeInCenter {
-        from { opacity: 0; transform: scale(0.96) translateY(20px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.5rem, 8vw, 2.4rem);
-    font-weight: 800;
-    letter-spacing: 2px;
-    margin: 10px 0;
-    text-transform: uppercase;
-    /* THE FIX: Force color to White and add a subtle glow */
-    color: #ffffff !important; 
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-h1 span {
-    /* THE FIX: Ensure the OS part stays Neon Green */
-    color: var(--accent) !important;
-    text-shadow: 0 0 15px rgba(0, 230, 118, 0.6);
-}
-    
-
-    p {
-        font-family: 'Michroma', sans-serif;
-        color: rgba(255, 255, 255, 0.5);
-        font-size: clamp(7px, 2vw, 9px);
-        margin: 15px 0 35px;
-        line-height: 2;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
-
-    .enter-btn {
-        position: relative;
-        padding: 18px 0;
-        width: 100%;
-        max-width: 280px;
-        background: rgba(0, 230, 118, 0.05);
-        color: var(--accent);
-        text-decoration: none;
-        border-radius: 12px;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        display: inline-block;
-        cursor: pointer;
-        border: 1px solid rgba(0, 230, 118, 0.3);
-        overflow: hidden; 
-        transition: all 0.4s ease;
-    }
-
-    .enter-btn::after {
-        content: '';
-        position: absolute;
-        top: 0; left: -100%;
-        width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.2), transparent);
-        animation: scan 3s infinite linear;
-    }
-
-    @keyframes scan { 0% { left: -100%; } 100% { left: 100%; } }
-
-    .enter-btn:hover {
-        background: var(--accent);
-        color: var(--primary);
-        box-shadow: 0 0 30px rgba(0, 230, 118, 0.5);
-        transform: translateY(-2px);
-    }
-
-    #progress-container {
-        display: none;
-        margin-top: 20px;
-        text-align: left;
-    }
-
-    .progress-label-wrap {
-        display: flex;
-        justify-content: space-between;
-        font-family: monospace;
-        font-size: 10px;
-        color: var(--accent);
-        margin-bottom: 8px;
-    }
-
-    .progress-track {
-        width: 100%;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    #progress-fill {
-        width: 0%;
-        height: 100%;
-        background: var(--accent);
-        box-shadow: 0 0 10px var(--accent);
-        transition: width 0.2s ease-out;
-    }
-
-    .footer-info {
-        position: absolute;
-        bottom: 20px;
-        text-align: center;
-        width: 100%;
-        z-index: 5;
-        padding: 0 20px;
-    }
-
-    .sys-code {
-        font-family: monospace;
-        font-size: 8px;
-        color: var(--accent);
-        opacity: 0.5;
-        letter-spacing: 1px;
-    }
-
-    /* --- MOBILE REFINEMENT --- */
-    @media (max-width: 768px) {
-        .left-visual, .right-visual {
-            width: 120px;
-            min-width: 120px;
-            bottom: -10px;
-            opacity: 0.3; /* Further faded for clarity */
+        :root {
+            --primary: #004d40;
+            --accent: #00e676;
+            --bg-dark: #0f172a;
         }
-        
+
+        /* Reset and iOS Lockdown */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; 
+            height: 100dvh; /* Dynamic height for iOS Safari */
+            overflow: hidden; 
+            overscroll-behavior: none;
+            position: fixed;
+            background: #0f172a;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, var(--primary), var(--bg-dark)) no-repeat;
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: #fff;
+            transition: opacity 0.8s ease;
+        }
+
+        #bg-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1; opacity: 0.35;
+            pointer-events: none;
+            will-change: transform;
+        }
+
         .hero {
-            /* On mobile, we align to center but use margin-bottom to pull it up */
-            align-items: center; 
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100dvh;
+            z-index: 3;
+            display: flex; justify-content: center; align-items: center;
+            padding: 20px;
+            touch-action: none;
         }
 
-        .glass-card {
-            padding: 30px 20px;
-            border-radius: 20px;
-            /* Lifted even higher on mobile to clear footer info */
-            margin-bottom: 15vh; 
+        /* SIDE VISUALS */
+        .left-visual, .right-visual {
+            position: absolute; bottom: 0;
+            width: 30vw; min-width: 150px;
+            z-index: 2; pointer-events: none;
         }
+        .left-visual { left: 0; animation: floatLeft 6s ease-in-out infinite; }
+        .right-visual { right: 0; animation: floatRight 6s ease-in-out infinite; }
+
+        .left-visual img, .right-visual img {
+            width: 100%; height: auto;
+            opacity: 0.3; display: block;
+        }
+
+        @keyframes floatLeft { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(10px,-10px); } }
+        @keyframes floatRight { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-10px,-10px); } }
+
+        /* CENTER CARD: iOS Optimized */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            /* Safari Specific Blur */
+            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(25px);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+            width: 100%; max-width: 420px;
+            text-align: center;
+            margin-bottom: 10vh;
+            /* Hardware acceleration for iOS */
+            transform: translateZ(0);
+            animation: fadeInCenter 1.2s ease-out;
+        }
+
+        @keyframes fadeInCenter {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.6rem, 8vw, 2.4rem);
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: 10px 0;
+            text-transform: uppercase;
+            color: #ffffff !important;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        h1 span {
+            color: var(--accent) !important;
+            text-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
+        }
+
+        p {
+            font-family: 'Michroma', sans-serif;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: clamp(7px, 2.2vw, 9px);
+            margin: 15px 0 35px;
+            line-height: 2;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* BUTTON: Touch-optimized */
+        .enter-btn {
+            position: relative;
+            padding: 18px 0;
+            width: 100%; max-width: 280px;
+            background: rgba(0, 230, 118, 0.05);
+            color: var(--accent);
+            text-decoration: none;
+            border-radius: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: inline-block;
+            cursor: pointer;
+            border: 1px solid rgba(0, 230, 118, 0.4);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .enter-btn:active {
+            transform: scale(0.95);
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* Scanning bar inside button */
+        .enter-btn::after {
+            content: '';
+            position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 230, 118, 0.25), transparent);
+            animation: scan 3s infinite linear;
+        }
+
+        @keyframes scan { 0% { left: -100%; } 100% { left: 100%; } }
+
+        /* LOADING PROGRESS */
+        #progress-container { display: none; margin-top: 20px; text-align: left; }
+        .progress-label-wrap { display: flex; justify-content: space-between; font-family: monospace; font-size: 10px; color: var(--accent); margin-bottom: 8px; }
+        .progress-track { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
+        #progress-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.2s ease-out; }
 
         .footer-info {
-            background: linear-gradient(to top, var(--bg-dark), transparent);
-            padding-top: 20px;
+            position: fixed; bottom: 20px;
+            width: 100%; text-align: center;
+            z-index: 5; padding: 0 20px;
+            pointer-events: none;
         }
-    }
 
-    /* 1. Global Reset to kill all accidental borders */
-* { 
-    box-sizing: border-box; 
-    outline: none !important; /* Removes focus rings */
-    border: none; /* Globally removes borders unless specified */
-}
+        .sys-code { font-family: monospace; font-size: 8px; color: var(--accent); opacity: 0.5; letter-spacing: 1px; }
 
-/* 2. Re-apply border ONLY to the elements that need it */
-.glass-card {
-    border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.enter-btn {
-    border: 1px solid rgba(0, 230, 118, 0.3);
-}
-
-.progress-track {
-    /* Set background without border to prevent the "line" effect */
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* 3. FIX FOR THE BOTTOM LINE: Clean the Footer */
-.footer-info {
-    position: absolute;
-    bottom: 20px;
-    text-align: center;
-    width: 100%;
-    z-index: 5;
-    padding: 0 20px;
-    /* Ensure NO background color or border at all */
-    background: transparent !important;
-    border: none !important;
-}
-
-/* 4. Fix AI Image seams */
-.left-visual img, .right-visual img {
-    width: 100%;
-    height: auto;
-    filter: drop-shadow(0 0 25px rgba(0, 230, 118, 0.15));
-    opacity: 0.3;
-    /* This prevents a line appearing at the bottom of the image */
-    display: block;
-}
-
-/* 5. Force the Canvas to cover the full viewport perfectly */
-#bg-canvas {
-    position: fixed; /* Changed from absolute to fixed */
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: 1;
-    opacity: 0.35;
-}
+        @media (max-width: 768px) {
+            .glass-card { margin-bottom: 12vh; padding: 30px 20px; border-radius: 20px; }
+            .left-visual, .right-visual { opacity: 0.15; width: 130px; }
+        }
     </style>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
-
-    <div class="left-visual">
-        <img src="image_db6ab6.png" alt="AI Core">
-    </div>
-
-    <div class="right-visual">
-        <img src="image_db6ab6_2.png" alt="Male AI Node">
-    </div>
+    
+    <div class="left-visual"><img src="image_db6ab6.png" alt="Core"></div>
+    <div class="right-visual"><img src="image_db6ab6_2.png" alt="Node"></div>
 
     <div class="hero">
         <div class="glass-card">
@@ -326,99 +194,97 @@ h1 span {
 
             <div id="progress-container">
                 <div class="progress-label-wrap">
-                    <span id="status-text">BOOTING_CORE...</span>
+                    <span id="status-text">MOUNTING_CORE...</span>
                     <span id="percent-text">0%</span>
                 </div>
-                <div class="progress-track">
-                    <div id="progress-fill"></div>
-                </div>
+                <div class="progress-track"><div id="progress-fill"></div></div>
             </div>
         </div>
     </div>
 
     <div class="footer-info">
-        <div class="sys-code">STATUS: ENCRYPTED // Data localized to internal storage protocol</div>
-        <div style="font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 8px;">Powered by Junzky with partnership of AI</div>
+        <div class="sys-code">STATUS: ENCRYPTED // UPLINK_STABLE</div>
+        <div style="font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 8px;">Powered by Junzky</div>
     </div>
 
     <script>
-        // Canvas Animation
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let lines = [];
-        function resize() { 
-    // Uses visualViewport for mobile to get the exact usable area
-    const width = window.visualViewport ? window.visualViewport.width : window.innerWidth;
-    const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    
-    canvas.width = width; 
-    canvas.height = height; 
-}
 
-// Add this line to listen for the mobile viewport changes
-if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', resize);
-}
-        
+        function resize() {
+            // iOS visualViewport fix
+            const v = window.visualViewport;
+            canvas.width = v ? v.width : window.innerWidth;
+            canvas.height = v ? v.height : window.innerHeight;
+        }
+
         class DataStream {
             constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * -canvas.height;
-                this.length = Math.random() * 120 + 40;
-                this.speed = Math.random() * 2.5 + 1.5;
-                this.width = Math.random() * 1.5 + 0.5;
-                this.opacity = Math.random() * 0.4 + 0.1;
+                this.length = Math.random() * 100 + 50;
+                this.speed = Math.random() * 2 + 1;
+                this.opacity = Math.random() * 0.3 + 0.1;
             }
             draw() {
+                // Simplified drawing for mobile performance
                 ctx.beginPath();
-                let grad = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.length);
-                grad.addColorStop(0, 'transparent');
-                grad.addColorStop(1, `rgba(0, 230, 118, ${this.opacity})`);
-                ctx.strokeStyle = grad; ctx.lineWidth = this.width;
-                ctx.moveTo(this.x, this.y); ctx.lineTo(this.x, this.y + this.length); ctx.stroke();
-                this.y += this.speed; if (this.y > canvas.height) this.reset();
+                ctx.strokeStyle = `rgba(0, 230, 118, ${this.opacity})`;
+                ctx.lineWidth = 1;
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x, this.y + this.length);
+                ctx.stroke();
+                this.y += this.speed;
+                if (this.y > canvas.height) this.reset();
             }
         }
+
+        function init() { lines = []; for(let i=0; i<40; i++) lines.push(new DataStream()); }
         
-        function init() { lines = []; for(let i=0; i<60; i++) lines.push(new DataStream()); }
-        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); lines.forEach(l => l.draw()); requestAnimationFrame(animate); }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for(let i=0; i<lines.length; i++) lines[i].draw();
+            requestAnimationFrame(animate);
+        }
+
         window.addEventListener('resize', resize);
+        if(window.visualViewport) window.visualViewport.addEventListener('resize', resize);
+        
         resize(); init(); animate();
 
         // Progress Logic
         const startBtn = document.getElementById('start-init');
-        const actionWrapper = document.getElementById('action-wrapper');
         const progressContainer = document.getElementById('progress-container');
-        const progressFill = document.getElementById('progress-fill');
-        const percentText = document.getElementById('percent-text');
-        const statusText = document.getElementById('status-text');
+        const actionWrapper = document.getElementById('action-wrapper');
 
         startBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            const targetUrl = this.getAttribute('href');
-
             actionWrapper.style.display = 'none';
             progressContainer.style.display = 'block';
 
             let width = 0;
-            const statusMessages = ["MOUNTING...", "DECRYPTING...", "UPLINKING...", "READY"];
+            const fill = document.getElementById('progress-fill');
+            const pText = document.getElementById('percent-text');
+            const sText = document.getElementById('status-text');
+            const msgs = ["MOUNTING...", "DECRYPTING...", "UPLINKING...", "READY"];
 
-            const loadingInterval = setInterval(() => {
+            const timer = setInterval(() => {
                 if (width >= 100) {
-                    clearInterval(loadingInterval);
+                    clearInterval(timer);
                     document.body.style.opacity = '0';
-                    setTimeout(() => { window.location.href = targetUrl; }, 600);
+                    setTimeout(() => { window.location.href = "login.html"; }, 500);
                 } else {
-                    width += Math.floor(Math.random() * 10) + 2;
+                    width += Math.floor(Math.random() * 15) + 5;
                     if (width > 100) width = 100;
-                    progressFill.style.width = width + '%';
-                    percentText.innerText = width + '%';
-                    if (width > 80) statusText.innerText = statusMessages[3];
-                    else if (width > 50) statusText.innerText = statusMessages[2];
-                    else if (width > 20) statusText.innerText = statusMessages[1];
+                    fill.style.width = width + '%';
+                    pText.innerText = width + '%';
+                    if (width > 75) sText.innerText = msgs[3];
+                    else if (width > 50) sText.innerText = msgs[2];
+                    else if (width > 25) sText.innerText = msgs[1];
                 }
-            }, 150); 
+            }, 180); 
         });
     </script>
 </body>
