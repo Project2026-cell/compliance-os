@@ -234,10 +234,10 @@ body {
 
 /* MAIN CONTENT */
 #main {
-    margin-left: 280px; 
-    margin-right: 280px; 
-    margin-top: 85px;  
-    padding: 20px;
+    margin-left: 300px; 
+    margin-right: 40px; 
+    margin-top: 100px;  
+    padding: 0px;
     transition: .3s;
 }
 #sidebar.collapsed ~ #main { margin-left: 80px; }
@@ -750,6 +750,7 @@ body.dark #form_position {
 /* Ensure the Forms link is hidden when the page first loads */
 #formsLink { 
     display: none !important; 
+     margin-right: 20px !important; 
 }
 @media print {
     /* Hide everything except the main content */
@@ -816,6 +817,11 @@ body.dark .kpi-icon {
 
 #sidebar-overlay {
     display: none;
+}
+
+#formsLink {
+    /* This adds the gap you requested specifically for the Forms button */
+    margin-right: 20px !important; 
 }
 
 
@@ -975,7 +981,7 @@ body.dark .kpi-icon {
        MAIN CONTENT
     ========================= */
     #main {
-        margin: 185px 12px 20px 12px !important;
+        margin: 240px 15px 20px 15px !important;
         padding: 0 !important;
         width: auto !important;
     }
@@ -1201,39 +1207,6 @@ body.dark .kpi-icon {
    <!-- THIS ID IS FOR THE THEME TOGGLE -->
    <button onclick="toggleTheme()" id="themeBtn" class="material-icons" style="background:none; border:none; color:white; cursor:pointer; font-size:22px; margin-left:15px;">dark_mode</button>
 </div>
-</div>
-
-<div id="rightPanel">
- <div class="widget" id="w-updates">
-    <h4><span class="material-icons" style="font-size:14px">history</span>Recent Activity</h4>
-    
-    <div class="activity-viewport" id="activityViewport">
-        <ul id="recentUpdates" class="scrolling-list">
-            <!-- Items injected by JavaScript -->
-        </ul>
-    </div>
-
-    <button class="toggle-btn" id="updatesToggleBtn" onclick="toggleLivelyWidget()">
-        <span class="material-icons" id="updatesIcon" style="font-size:12px">expand_more</span>
-        <span id="updatesText">Show All</span>
-    </button>
-</div>
-
- <div class="widget" id="w-stores">
-   <h4><span class="material-icons" style="font-size:14px">store</span>Pending Stores</h4>
-   <ul id="pendingStores"></ul>
-   <button class="toggle-btn" onclick="toggleSingleWidget('w-stores')">
-     <span class="material-icons" style="font-size:12px">add</span>Show All
-   </button>
- </div>
-
- <div class="widget" id="w-adv">
-   <h4><span class="material-icons" style="font-size:14px">campaign</span>Advisories</h4>
-   <ul id="advisories"></ul>
-   <button class="toggle-btn" onclick="toggleSingleWidget('w-adv')">
-     <span class="material-icons" style="font-size:12px">add</span>Show All
-   </button>
- </div>
 </div>
 
 <div id="main">
