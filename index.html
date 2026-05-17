@@ -113,6 +113,37 @@ body {
     overflow-x: hidden;
 }
 
+/* --- SIDEBAR DATE STYLING --- */
+.sidebar-status {
+    padding-left: 45px; /* Aligns text with the word COMPLIANCE */
+    margin-top: -5px;
+    margin-bottom: 5px;
+}
+
+.sidebar-status small {
+    display: block;
+    font-size: 8px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+    font-family: 'Orbitron', sans-serif;
+}
+
+#live-clock {
+     font-size: 10.5px; /* Slightly smaller and cleaner */
+    font-weight: 600;
+    color: #38bdf8; /* MODERN BLUE */
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+    display: block;
+}
+
+/* Hide date when sidebar is collapsed */
+#sidebar.collapsed #sidebar-date-container {
+    display: none !important;
+}
+
 /* SIDEBAR - Scroll Removed */
 #sidebar {
     width:260px; 
@@ -147,9 +178,8 @@ body {
 .brand h2{ margin:0; font-size:12.5px; font-weight:700; color: var(--accent-green); white-space:nowrap; text-transform: uppercase; letter-spacing: 0.3px; }
 
 .logout-wrapper {
-    padding-left: 37px;
+     padding-left: 45px !important; /* Matches Date alignment */
     margin-bottom: 25px;
-    transition: .3s ease;
 }
 .logout-link {
     color: rgba(255,255,255,0.6);
@@ -469,132 +499,6 @@ body.dark .kpi p, body.dark .leader-val, body.dark .leader-name { color: var(--a
     .card { break-inside: avoid; border: 1px solid #ddd !important; box-shadow: none !important; }
     body { background: white !important; color: black !important; }
 }
-/* The 'window' for your list */
-#recentUpdates {
-    max-height: 120px; /* Reduced slightly to look cleaner when closed */
-    /* Changed to 'hidden' to ensure no accidental bars when closed */
-    overflow: hidden; 
-    transition: max-height 0.4s ease-in-out;
-    display: flex;
-    flex-direction: column;
-}
-
-/* When the 'Show All' button is clicked */
-.widget.expanded #recentUpdates {
-    /* 300px-350px is better for laptop screens to keep the button visible */
-    max-height: 350px; 
-    
-    /* This forces the scrollbar to appear specifically for this list */
-    overflow-y: auto !important; 
-    
-    /* Adds a little space so the text doesn't touch the scrollbar */
-    padding-right: 10px; 
-    border-top: 1px solid rgba(0,0,0,0.05);
-    margin-top: 10px;
-}
-
-/* Custom Scrollbar Styling (So you can actually see it) */
-.widget.expanded #recentUpdates::-webkit-scrollbar {
-    width: 6px;
-    display: block !important;
-}
-.widget.expanded #recentUpdates::-webkit-scrollbar-thumb {
-    background: #cbd5e1; /* Grey color */
-    border-radius: 10px;
-}
-/* 1. The container window (The "Mask") */
-.activity-viewport {
-     height: 186px; /* Exactly 3 items at 62px each */
-    overflow: hidden; position: relative; z-index: 1;
-    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-}
-
-/* 2. State when "Show All" is clicked */
-.activity-viewport.is-expanded { height: 500px !important; overflow-y: auto !important; -webkit-mask-image: none !important; }
-.activity-viewport.is-expanded .scrolling-list { animation: none !important; transform: translateY(0) !important;}
-
-/* 3. The moving list animation */
-.scrolling-list
-
-/* Stops animation when viewing all or hovering */
-.scrolling-list:hover,
-.activity-viewport.is-expanded .scrolling-list {
-    animation-play-state: paused;
-    animation: none;
-    transform: translateY(0); /* Resets to top when expanded */
-}
-
-/* 4. Individual log items */
-.scrolling-list li {
-    height: 62px; 
-    display: flex; 
-    align-items: center; 
-    gap: 15px;
-    padding: 0 20px; /* Aligns text with the "R" in RECENT ACTIVITY */
-    border-bottom: 1px solid rgba(148, 163, 184, 0.08);
-    box-sizing: border-box;
-}
-
-/* 5. Animation Keyframes */
-@keyframes scrollUp {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-50%); }
-}
-
-/* Expanded State for "Show All" */
-.activity-viewport.is-expanded {
-    height: 400px !important; /* Force it to grow */
-    overflow-y: auto !important; /* Allow scrolling manually */
-    mask-image: none;
-}
-
-/* This is CRITICAL: stop the animation so the users don't fly away when expanded */
-.activity-viewport.is-expanded .scrolling-list {
-    animation: none !important;
-    transform: translateY(0) !important; 
-}
-
-.scrolling-list li {
-   height: 62px; /* Fixed height is critical for the animation math */
-    display: flex; align-items: center; gap: 15px;
-    padding: 0 35px; border-bottom: 1px solid rgba(148, 163, 184, 0.08);
-    box-sizing: border-box;
-}
-/* --- DARK MODE ADJUSTMENTS FOR LIVELY WIDGET --- */
-
-/* 1. Change the Event text to a light color so it's readable */
-body.dark .activity-info .event {
-    color: #e2e8f0 !important; /* Soft white/light grey */
-}
-
-/* 2. Keep the Timestamp visible but slightly muted */
-body.dark .activity-info .time {
-    color: #94a3b8 !important; /* Slate grey */
-}
-
-/* 3. IMPORTANT: Update the "Shield" (Header) color */
-/* This prevents a white block from appearing at the top of the dark widget */
-body.dark .widget h4 {
-    background-color: #1e293b !important; /* Matches your dark card-bg variable */
-    color: #94a3b8 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* 4. Improve Bullet Visibility in Dark Mode */
-body.dark .bullet-blue {
-    background-color: #60a5fa; /* Brighter blue for dark mode */
-    box-shadow: 0 0 8px rgba(96, 165, 250, 0.4);
-}
-body.dark .bullet-green {
-    background-color: var(--accent-green);
-    box-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
-}
-body.dark #formOverlay h2 {
-    color: var(--accent-green) !important;
-    text-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
-}
-
 /* 5. Adjust the border between items */
 body.dark .scrolling-list li {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -1136,6 +1040,11 @@ body.dark .kpi-icon {
    <button id="collapseBtn" onclick="toggleSidebar()">☰</button>
  </div>
 
+  <!-- ADD THIS NEW DIV HERE -->
+ <div id="sidebar-date-container" class="sidebar-status">
+    <div id="live-clock">Loading...</div>
+ </div>
+
  <div class="logout-wrapper">
     <a onclick="logout()" class="logout-link">
         <span class="material-icons" style="font-size:12px;">logout</span> Logout
@@ -1219,6 +1128,8 @@ body.dark .kpi-icon {
 </div>
 
  <div id="acquisition" class="section">
+
+
    <div class="kpis">
     <!-- CARD 1: TOTAL MEMBERS -->
     <div class="card kpi">
@@ -1285,7 +1196,12 @@ body.dark .kpi-icon {
 
         <!-- Store Specific Top 3 -->
         <div class="card top3-card">
-            <h4><span class="material-icons">person</span> Top 3 in <span id="selectedStoreName">Store</span></h4>
+            <h4>
+        <span class="material-icons">person</span> 
+        Top 3 in Store: 
+        <!-- This span will now hold the Store, Date, and Week info -->
+        <span id="headerContext" style="color: var(--accent-green); margin-left: 5px; text-transform: none; font-size: 11px;">Loading...</span>
+    </h4>
             <div id="localStoreTop3"></div>
         </div>
     </div>
@@ -1397,7 +1313,50 @@ body.dark .kpi-icon {
    // ==========================================
 // 1. GLOBAL SETTINGS & STATE
 // ==========================================
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIoy_LpycRDbjkzTw9NvuhmKPDwjGscko8R0Du89kb3eUaI-Mrba4yjux5fRiToRWv/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3Vk_z6hSdSeMkCwEI7d9-xY5sZXVsuyAdZCyV49GRzUyqFRTujEMSlJtvwF87GRTK/exec";
+const SECRET_KEY = "IOS_SECURE_KEY_2026";
+
+// ==========================================
+// GOOGLE SCRIPT FETCH
+// On localhost: routes through corsproxy.io to bypass CORS restriction.
+// On production (real domain): fetches Google Script directly.
+// ==========================================
+async function jsonpFetch(url) {
+    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:';
+
+    // Direct fetch first (works on production / file://)
+    if (!isLocal) {
+        try {
+            const res = await fetch(url, { redirect: 'follow' });
+            if (res.ok) return await res.json();
+        } catch(e) { /* fall through */ }
+    }
+
+    // Proxy fetch for localhost (try two proxies in case one is down)
+    const proxies = [
+        'https://corsproxy.io/?' + encodeURIComponent(url),
+        'https://api.allorigins.win/get?url=' + encodeURIComponent(url),
+    ];
+
+    for (const proxyUrl of proxies) {
+        try {
+            const res = await fetch(proxyUrl);
+            if (!res.ok) continue;
+            const data = await res.json();
+            // allorigins wraps in { contents: "..." }, corsproxy returns directly
+            if (data && data.contents) return JSON.parse(data.contents);
+            return data;
+        } catch(e) {
+            console.warn('Proxy failed, trying next...', proxyUrl, e.message);
+        }
+    }
+
+    throw new Error('All proxies failed. Open the file directly or check Google Script deployment.');
+}
+
+let currentStore = "";
+let currentWeek = "Overall";
+let currentDate = "";
 
 // --- MANILA TIMEZONE HELPERS ---
 function getPHDate() {
@@ -1428,13 +1387,35 @@ async function updateDashboardData() {
         const date = document.getElementById('datePicker')?.value || "";
         const week = document.getElementById('weekPicker')?.value || "Overall";
 
-        const res = await fetch(SCRIPT_URL + `?action=get-stats&store=${encodeURIComponent(store)}&date=${date}&week=${week}`);
+        const res = await fetch(`${SCRIPT_URL}?action=get-stats&key=${SECRET_KEY}&store=${encodeURIComponent(store)}&date=${date}&week=${week}`);
         const s = await res.json();
         
-        if (!s || !s.kpis) return;
-        currentTrendData = s.trends;
+        if (!s || !s.kpis) {
+            console.error("❌ Missing data. Full response was:", JSON.stringify(s));
+            return;
+        }
+        
+        // --- 1. UPDATE DYNAMIC HEADER TEXT ---
+        // Build the string: "Store Name | Date | Week"
+        let contextText = (store === "" ? "All Stores" : store);
+        
+        if (date !== "") {
+            contextText += ` | ${date}`;
+        }
+        
+        if (week !== "Overall") {
+            contextText += ` | ${week}`;
+        } else if (date === "") {
+            // Only show "Overall" if no specific date is selected
+            contextText += ` | Overall`;
+        }
 
-        // --- KPI 1: TOTAL MEMBERS & DONUT ---
+        const contextEl = document.getElementById('headerContext');
+        if (contextEl) {
+            contextEl.innerText = contextText;
+        }
+
+        // --- 2. KPI 1: TOTAL MEMBERS & DONUT ---
         document.getElementById('total').textContent = s.kpis.total.toLocaleString();
         if (window.donut) {
             const donutTotal = s.kpis.outright + s.kpis.consignor;
@@ -1442,12 +1423,13 @@ async function updateDashboardData() {
             donut.update();
         }
 
-        // --- KPI 2: TODAY ACQUISITION (Goal: 60) ---
+        // --- 3. KPI 2: TODAY ACQUISITION (Goal: 60) ---
         const today = s.kpis.today || 0;
         const yesterday = s.kpis.yesterday || 0;
         const dayBudgetPct = Math.round((today / 60) * 100);
+        
+        // Color logic: Red if below budget, Green if hit
         const dayColor = dayBudgetPct >= 100 ? 'var(--accent-green)' : '#ff5252';
-        const dayGrowth = yesterday === 0 ? 0 : Math.round(((today - yesterday) / yesterday) * 100);
 
         document.getElementById('daily').textContent = today.toLocaleString();
         const dBudget = document.getElementById('dayBudget');
@@ -1455,46 +1437,38 @@ async function updateDashboardData() {
             dBudget.style.color = dayColor;
             dBudget.innerHTML = `<b>${dayBudgetPct}%</b> to Budget`;
         }
+        
         const dGrowth = document.getElementById('growth');
         if (dGrowth) {
-            dGrowth.style.color = dayGrowth >= 0 ? 'var(--accent-green)' : '#ff5252';
-            dGrowth.innerHTML = `<span class="material-icons" style="font-size:12px">${dayGrowth >= 0 ? 'arrow_upward' : 'arrow_downward'}</span> ${Math.abs(dayGrowth)}% vs Yesterday`;
+            const dDiff = today - yesterday;
+            dGrowth.style.color = dDiff >= 0 ? 'var(--accent-green)' : '#ff5252';
+            dGrowth.innerHTML = `<span class="material-icons" style="font-size:12px">${dDiff >= 0 ? 'arrow_upward' : 'arrow_downward'}</span> ${Math.abs(dDiff)} vs Yesterday`;
         }
 
-        // --- KPI 3: WEEKLY ACQUISITION (Goal: 450) ---
-    // --- KPI 3: WEEKLY ACQUISITION & GROWTH ---
-        const isOverall = week === "Overall";
+        // --- 4. KPI 3: WEEKLY ACQUISITION & GROWTH ---
         const weekActual = s.kpis.weekActual || 0;
         const weekLast = s.kpis.weekLast || 0;
-        const selectedWeek = document.getElementById('weekPicker').value;
-
-        // Update the Main Number
-        document.getElementById('avg').textContent = weekActual.toLocaleString();
-
-        // 1. Percentage to Budget (Target: 450)
-        // If "Overall" is selected, target becomes 1800
-        const target = (selectedWeek === "Overall") ? 1800 : 450;
-        const budgetPct = Math.round((weekActual / target) * 100);
         
-        const budgetEl = document.getElementById('weekBudget');
-        if (budgetEl) {
-            budgetEl.style.color = budgetPct >= 100 ? 'var(--accent-green)' : '#ff5252';
-            budgetEl.innerHTML = `<b>${budgetPct}%</b> to Budget`;
+        // Budget calculation: 1800 for month/overall, 450 for specific week
+        const target = (week === "Overall") ? 1800 : 450;
+        const weekBudgetPct = Math.round((weekActual / target) * 100);
+        const weekColor = weekBudgetPct >= 100 ? 'var(--accent-green)' : '#ff5252';
+
+        document.getElementById('avg').textContent = weekActual.toLocaleString();
+        
+        const wBudget = document.getElementById('weekBudget');
+        if (wBudget) {
+            wBudget.style.color = weekColor;
+            wBudget.innerHTML = `<b>${weekBudgetPct}%</b> to Budget`;
         }
 
-        // 2. Growth Comparison Logic (Fixes the 100% bug)
         const weekCompEl = document.getElementById('weeklyComp');
         if (weekCompEl) {
             if (weekLast > 0) {
-                // Real comparison if last week has data
-                const weekGrowth = Math.round(((weekActual - weekLast) / weekLast) * 100);
-                const gColor = weekGrowth >= 0 ? 'var(--accent-green)' : '#ff5252';
-                const gIcon = weekGrowth >= 0 ? 'arrow_upward' : 'arrow_downward';
-                
-                weekCompEl.style.color = gColor;
-                weekCompEl.innerHTML = `<span class="material-icons" style="font-size:12px">${gIcon}</span> ${Math.abs(weekGrowth)}% vs Last Week`;
+                const weekDiff = weekActual - weekLast;
+                weekCompEl.style.color = weekDiff >= 0 ? 'var(--accent-green)' : '#ff5252';
+                weekCompEl.innerHTML = `<span class="material-icons" style="font-size:12px">${weekDiff >= 0 ? 'arrow_upward' : 'arrow_downward'}</span> ${Math.abs(weekDiff)} vs Last Week`;
             } else if (weekActual > 0) {
-                // If last week was 0, show this instead of "100%"
                 weekCompEl.style.color = 'var(--accent-blue)';
                 weekCompEl.innerHTML = `<span class="material-icons" style="font-size:12px">star</span> New Growth Cycle`;
             } else {
@@ -1503,12 +1477,15 @@ async function updateDashboardData() {
             }
         }
 
-        // --- REFRESH RANKINGS & TREND ---
+        // --- 5. REFRESH RANKINGS & TREND ---
+        currentTrendData = s.trends;
         const activeBtn = document.querySelector('.chart-controls button.active');
         updateTrend(chartView, activeBtn);
         renderRankings(s);
 
-    } catch (e) { console.error("Cloud Sync Error:", e); }
+    } catch (e) { 
+        console.error("Cloud Sync Error:", e); 
+    }
 }
 
 // ==========================================
@@ -1549,13 +1526,12 @@ function switchSection(targetId, titleText) {
 // ==========================================
 function startLivelyCycle() {
     updateDashboardData();
-    updateRecentActivity();
     liveRefresh = setInterval(() => {
         const views = ['daily', 'weekly', 'monthly'];
         chartView = views[(views.indexOf(chartView) + 1) % views.length];
         const btn = document.querySelectorAll('.chart-controls button')[views.indexOf(chartView)];
         updateTrend(chartView, btn);
-        if(chartView === 'daily') { updateDashboardData(); updateRecentActivity(); }
+        if(chartView === 'daily') { updateDashboardData();}
     }, 3500);
 }
 
@@ -1584,9 +1560,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Start Data Sync
     fetchStores(); 
     initWeekPicker();
+
+    // FIX: Default datePicker to today (Manila time) so KPIs load correctly
+    const datePicker = document.getElementById('datePicker');
+    if (datePicker && !datePicker.value) {
+        datePicker.value = getPHDate();
+    }
+
     startLivelyCycle();
 
-    // 4. Hover Stop
+    // 5. Auto-logout inactivity listeners
+    resetInactivityTimer();
+    const activityEvents = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'];
+    activityEvents.forEach(event => {
+        document.addEventListener(event, resetInactivityTimer, true);
+    });
+    // 4. Hover Stop — pause live cycle when user is interacting
     const mainArea = document.getElementById('main');
     if(mainArea) {
         mainArea.addEventListener('mouseenter', stopLivelyCycle);
@@ -1594,95 +1583,183 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ==========================================
-// 5. HELPER FUNCTIONS
-// ==========================================
 function renderRankings(s) {
-    const colorCode = (p) => p >= 100 ? 'var(--accent-green)' : '#ff5252';
-    const formatTop3 = (item, i) => `<div class="top3-item"><span class="material-icons" style="color:${i==0?'#ffd700':'#94a3b8'};">military_tech</span><div style="margin-left:10px;"><div style="font-size:11px; font-weight:700;">${item.name}</div><div style="font-size:9px; color:${colorCode(item.pct)}; font-weight:700;">${item.pct}% to Budget</div></div><div style="margin-left:auto; font-size:11px; font-weight:700;">${item.val}</div></div>`;
-    const formatLBoard = (item, i) => `<div class="leader-row"><div class="leader-meta"><span>#${i+1} ${item.name}</span><span style="color:${colorCode(item.pct)}">${item.val} (${item.pct}%)</span></div><div class="leader-bar-bg"><div class="leader-bar-fill" style="width:${Math.min(item.pct, 100)}%; background:${colorCode(item.pct)};"></div></div></div>`;
+    const getColor = (p) => p >= 100 ? 'var(--accent-green)' : '#ff5252';
 
-    if (document.getElementById('areaEmpTop3')) document.getElementById('areaEmpTop3').innerHTML = s.topEmployeesArea.slice(0,3).map((item, i) => formatTop3(item, i)).join('');
-    if (document.getElementById('areaStoreTop3')) document.getElementById('areaStoreTop3').innerHTML = s.topStores.slice(0,3).map((item, i) => formatTop3(item, i)).join('');
+    // Helper for rows (Top 3 Cards)
+    const formatTop3Row = (item, i) => `
+        <div class="top3-item">
+            <span class="material-icons" style="color:${i==0?'#ffd700':'#94a3b8'}; font-size:18px;">military_tech</span>
+            <div style="margin-left:10px;">
+                <div style="font-size:11px; font-weight:700;">${item.name}</div>
+                <div style="font-size:9px; color:${getColor(item.pct)}; font-weight:700;">${item.pct}% to Budget</div>
+            </div>
+            <div style="margin-left:auto; font-size:11px; font-weight:700;">${item.val}</div>
+        </div>`;
+
+    // Helper for bars (Leaderboard Cards)
+    const formatBarRow = (item, i) => `
+        <div class="leader-row">
+            <div class="leader-meta">
+                <span>#${i+1} ${item.name}</span>
+                <span style="color:${getColor(item.pct)}; font-weight:700;">${item.val} (${item.pct}%)</span>
+            </div>
+            <div class="leader-bar-bg">
+                <div class="leader-bar-fill" style="width:${Math.min(item.pct, 100)}%; background:${getColor(item.pct)};"></div>
+            </div>
+        </div>`;
+
+    // 1. Area Top 3 Employees (Left Top)
+    if (document.getElementById('areaEmpTop3')) 
+        document.getElementById('areaEmpTop3').innerHTML = s.topEmployeesArea.slice(0,3).map(formatTop3Row).join('');
+
+    // 2. Area Top 3 Stores (Left Middle)
+    if (document.getElementById('areaStoreTop3')) 
+        document.getElementById('areaStoreTop3').innerHTML = s.topStores.slice(0,3).map(formatTop3Row).join('');
+
+    // 3. Top 3 in Selected Store (Bottom Left)
     if (document.getElementById('localStoreTop3')) {
-        document.getElementById('selectedStoreName').innerText = document.getElementById('storeSelector')?.value || "Store";
-        document.getElementById('localStoreTop3').innerHTML = s.topEmployeesStore.slice(0,3).map((item, i) => formatTop3(item, i)).join('');
+        const list = s.topEmployeesStore.slice(0,3);
+        document.getElementById('localStoreTop3').innerHTML = list.length > 0 
+            ? list.map(formatTop3Row).join('') 
+            : "<div style='font-size:11px; color:#94a3b8; padding:10px;'>No data for this store/period</div>";
     }
-    if (document.getElementById('leaderboardList')) document.getElementById('leaderboardList').innerHTML = s.topEmployeesArea.slice(0,20).map((item, i) => formatLBoard(item, i)).join('');
-    if (document.getElementById('allStoresLeaderboard')) document.getElementById('allStoresLeaderboard').innerHTML = s.topStores.map((item, i) => formatLBoard(item, i)).join('');
+
+    // 4. Employee Leaderboard (Top 20 - Right Top)
+    if (document.getElementById('leaderboardList')) 
+        document.getElementById('leaderboardList').innerHTML = s.topEmployeesArea.slice(0,20).map(formatBarRow).join('');
+
+    // 5. All Stores Performance (Right Bottom)
+    if (document.getElementById('allStoresLeaderboard')) 
+        document.getElementById('allStoresLeaderboard').innerHTML = s.topStores.map(formatBarRow).join('');
+}
+
+// --- LIVE SIDEBAR CLOCK ---
+function updateSidebarClock() {
+    const now = new Date();
+    
+    // Format: Mon, May 18, 2026
+    const dateOptions = { 
+        weekday: 'short', 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric',
+        timeZone: 'Asia/Manila' 
+    };
+    
+    // Format: 1:30 AM
+    const timeOptions = { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: true,
+        timeZone: 'Asia/Manila' 
+    };
+
+    const dateStr = now.toLocaleDateString('en-US', dateOptions);
+    const timeStr = now.toLocaleTimeString('en-US', timeOptions);
+
+    const clockEl = document.getElementById('live-clock');
+    if (clockEl) {
+        clockEl.innerHTML = `${dateStr} <span style="opacity:0.5; margin:0 5px;">|</span> ${timeStr}`;
+    }
 }
 
 async function fetchStores() {
-    try {
-        const res = await fetch(SCRIPT_URL + "?action=get-stores");
-        const stores = await res.json();
-        const sel = document.getElementById('storeSelector');
-        if(!sel) return;
-        stores.forEach(s => { let o = document.createElement('option'); o.value = s; o.innerText = s; sel.appendChild(o); });
-    } catch(e) { console.error(e); }
+  try {
+    const stores = await jsonpFetch(`${SCRIPT_URL}?action=get-stores&key=IOS_SECURE_KEY_2026`);
+    const select = document.getElementById("storeSelector");
+    if (!select) return;
+    select.innerHTML = `<option value="">All Stores</option>`;
+    if (Array.isArray(stores)) {
+        stores.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s;
+            opt.textContent = s;
+            select.appendChild(opt);
+        });
+    }
+  } catch(e) {
+    console.error("fetchStores error:", e);
+  }
+}
+
+// ==========================================
+// DIAGNOSTIC FUNCTION
+// ==========================================
+function runDiagnostic() {
+    const log = document.getElementById('diagLog');
+    const date = document.getElementById('datePicker')?.value || getPHDate();
+    const week = document.getElementById('weekPicker')?.value || 'Overall';
+    const store = document.getElementById('storeSelector')?.value || '';
+
+    const url1 = SCRIPT_URL + '?action=get-stores&key=' + SECRET_KEY;
+    const url2 = SCRIPT_URL + '?action=get-stats&store=' + encodeURIComponent(store) + '&date=' + date + '&week=' + week + '&key=' + SECRET_KEY;
+
+    // Set clickable direct links
+    const l1 = document.getElementById('diagLink1');
+    const l2 = document.getElementById('diagLink2');
+    if (l1) { l1.href = url1; l1.textContent = url1; }
+    if (l2) { l2.href = url2; l2.textContent = url2; }
+
+    log.style.color = '#f8fafc';
+    log.textContent = 'Testing via proxy (allorigins.win)...\n';
+
+    // Test 1: get-stores via proxy
+    log.textContent += '\n[1/2] Fetching stores...';
+    jsonpFetch(url1).then(data => {
+        if (!Array.isArray(data)) {
+            log.style.color = '#ff9800';
+            log.textContent += '\n⚠️ Stores response unexpected:\n' + JSON.stringify(data, null, 2);
+            return Promise.reject(new Error('bad-stores'));
+        }
+        log.textContent += ' ✅ Got ' + data.length + ' stores: ' + data.slice(0,3).join(', ');
+
+        // Test 2: get-stats via proxy
+        log.textContent += '\n\n[2/2] Fetching stats (date=' + date + ', week=' + week + ')...';
+        return jsonpFetch(url2);
+    }).then(data => {
+        if (!data) {
+            log.style.color = '#ff5252';
+            log.textContent += '\n❌ No data returned (null/undefined)';
+            return;
+        }
+        if (!data.kpis) {
+            log.style.color = '#ff9800';
+            log.textContent += '\n⚠️ Missing .kpis — full response:\n' + JSON.stringify(data, null, 2);
+            return;
+        }
+        log.style.color = '#00e676';
+        log.textContent += '\n✅ ALL GOOD!\n\nKPIs:\n' + JSON.stringify(data.kpis, null, 2);
+        if (data._debug) log.textContent += '\n\nDebug:\n' + JSON.stringify(data._debug, null, 2);
+    }).catch(err => {
+        if (err.message === 'bad-stores') return;
+        log.style.color = '#ff5252';
+        log.textContent += '\n\n❌ PROXY FAILED: ' + err.message;
+        log.textContent += '\n\nPossible causes:';
+        log.textContent += '\n1. Google Script not deployed as "Anyone" — check Deploy settings';
+        log.textContent += '\n2. allorigins.win is temporarily down — try again in 30s';
+        log.textContent += '\n3. Open the direct links below in a new tab to confirm the script returns JSON';
+    });
 }
 
 function updateTrend(range, btn) {
     chartView = range;
     document.querySelectorAll('.chart-controls button').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
-    if (window.line && currentTrendData[range]) {
+    if ( window.line &&
+    currentTrendData &&
+    currentTrendData[range] &&
+    currentTrendData[range].labels) {
         line.data.labels = currentTrendData[range].labels;
         line.data.datasets[0].data = currentTrendData[range].data;
         line.update();
     }
 }
 
-async function updateRecentActivity() {
-    try {
-        const res = await fetch(SCRIPT_URL + "?action=recent-activity");
-        rawActivities = await res.json();
-        const activityList = document.getElementById('recentUpdates');
-        if (!activityList || rawActivities.length === 0) return;
 
-        // Map data with color intelligence
-        const html = rawActivities.map(item => {
-            const msg = item.event.toLowerCase();
-            let bulletClass = 'bullet-blue'; // Default Login
-            if (msg.includes('registered') || msg.includes('enrolled')) bulletClass = 'bullet-green';
-            if (msg.includes('entry')) bulletClass = 'bullet-teal'; // Add teal to your CSS or use accent-green
-            
-            return `
-                <li>
-                    <span class="status-bullet ${bulletClass}"></span>
-                    <div class="activity-info">
-                        <span class="time">${item.timestamp}</span>
-                        <span class="event">${item.event}</span>
-                    </div>
-                </li>
-            `;
-        }).join('');
-
-        // GAP-KILLER: If list is short, repeat it more times to ensure no empty space
-        let multiplier = 2;
-        if (rawActivities.length === 1) multiplier = 6;
-        else if (rawActivities.length < 4) multiplier = 4;
-
-        activityList.innerHTML = new Array(multiplier).fill(html).join('');
-        
-    } catch (e) { console.error("Activity Sync Error:", e); }
-}
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    // ... your existing init code (fetchStores, startLivelyCycle, etc.) ...
-
-    // --- INITIALIZE AUTO-LOGOUT ---
-    resetInactivityTimer();
-
-    // List of events that count as "Activity"
-    const activityEvents = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'];
-
-    // Add listener for each event
-    activityEvents.forEach(event => {
-        document.addEventListener(event, resetInactivityTimer, true);
-    });
-});
+// FIX: Removed duplicate DOMContentLoaded block that referenced wrong ID "storeSelect"
+// and called deprecated updateTrendData(). Store change is handled by storeSelector's onchange attribute.
+// Auto-logout listeners are now inside the main DOMContentLoaded block above.
 
 function openForm() {
     document.getElementById('formOverlay').style.display = 'flex';
@@ -1701,45 +1778,99 @@ function openForm() {
 function closeForm() { document.getElementById('formOverlay').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
 async function submitAcquisitionForm() {
+    // 1. Get Elements
     const name = document.getElementById('form_emp_name');
     const pos = document.getElementById('form_position');
     const btn = document.getElementById('submitBtn');
-    if (!name.value || !pos.value) { Swal.fire({ title: 'PROTOCOL INCOMPLETE', icon: 'warning', background: '#1e293b', color: '#fff' }); return; }
-    btn.disabled = true; btn.innerText = "SAVING...";
-    const now = new Date();
 
-    // Captured inside submitAcquisitionForm
+    // 2. Validation
+    if (!name.value || !pos.value) {
+        return Swal.fire({ title: 'ERROR', text: 'Name and Position required', icon: 'error' });
+    }
+
+    // 3. UI Loading State (This is where it usually sticks)
+    btn.disabled = true;
+    btn.innerText = "UPLINKING...";
+
+    // 4. Build Payload
     const payload = {
         action: 'add-acquisition',
+        security_key: SECRET_KEY, // Ensure SEC_KEY is defined at the top of your script
         store_code: localStorage.getItem('store_code'),
         store_name: localStorage.getItem('store_name'),
         employee_name: name.value.trim(),
         position: pos.value.trim(),
         employee_type: document.getElementById('form_emp_type').value,
         quantity: document.getElementById('form_qty').value,
-        
-        // --- UPDATED FOR PHILIPPINES TIMEZONE ---
-        date: getPHDate(), 
+        date: getPHDate(),
         month: getPHMonth(),
-        year: getPHYear(),
-        
-        // Week selection comes from the form dropdown
-        week: document.getElementById('form_week_select').value
+        week: document.getElementById('form_week_select').value,
+        year: new Date().getFullYear()
     };
 
     try {
-        await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-        Swal.fire({ title: 'RECORDED SUCCESSFULLY!', icon: 'success', timer: 2000, showConfirmButton: false, background: '#1e293b', color: '#fff' });
-        name.value = ""; pos.value = ""; closeForm(); updateDashboardData();
-    } catch (e) { alert("Sync error"); }
-    finally { btn.disabled = false; btn.innerText = "SUBMIT DATA"; }
+        // 5. Send to Google
+        // Using 'no-cors' means the browser sends data but doesn't wait for a reply
+        // This is the most stable way to prevent "stucking" on restricted PCs
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', 
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(payload)
+        });
+
+        // 6. SUCCESS - Since we use no-cors, we show success immediately after fetch finishes
+        Swal.fire({
+            title: 'RECORDED SUCCESSFULLY!',
+            text: 'Data uplink established.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+            background: document.body.classList.contains('dark') ? '#1e293b' : '#fff',
+            color: document.body.classList.contains('dark') ? '#fff' : '#000'
+        });
+
+        // 7. CLEANUP
+        name.value = "";
+        pos.value = "";
+        closeForm();
+        
+        // Refresh visuals
+        if (typeof updateDashboardData === "function") updateDashboardData();
+        if (typeof updateRecentActivity === "function") updateRecentActivity();
+
+    } catch (error) {
+        console.error("Submission Error:", error);
+        alert("Sync failed. Check connection.");
+    } finally {
+        // RESET BUTTON
+        btn.disabled = false;
+        btn.innerText = "SUBMIT DATA";
+    }
+}
+
+function getISOWeekNum() {
+    // Returns current ISO week number in Manila time
+    const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Manila' }));
+    const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 
 function initWeekPicker() {
     const p = document.getElementById('weekPicker');
     if(!p) return;
-    p.innerHTML = '<option value="Overall">Overall</option>'; 
-    for(let i=1; i<=52; i++) { let o = document.createElement('option'); o.value="Week "+i; o.innerText="Week "+i; p.appendChild(o); }
+    p.innerHTML = '<option value="Overall">Overall</option>';
+    for(let i=1; i<=52; i++) {
+        let o = document.createElement('option');
+        o.value = "Week " + i;
+        o.innerText = "Week " + i;
+        p.appendChild(o);
+    }
+    // Default to current week so KPIs are accurate on load
+    const currentWeek = "Week " + getISOWeekNum();
+    p.value = currentWeek;
 }
 
 // --- AUTO-LOGOUT CONFIGURATION ---
@@ -1884,7 +2015,9 @@ function triggerCongratulations() {
 // --- 2. ATTACH TO DOM ---
 document.addEventListener('DOMContentLoaded', () => {
 
-
+// Start the sidebar clock
+    updateSidebarClock();
+    setInterval(updateSidebarClock, 60000); // Update every minute
 
 
     // Select the containers for Top 3
@@ -1945,20 +2078,96 @@ function updateNotifBadge(count) {
         badge.style.display = 'none';
     }
 }
+function renderActivityList(daily, weekly, monthly) {
 
-// Modify your updateRecentActivity to update the badge
-async function updateRecentActivity() {
-    try {
-        const response = await fetch(SCRIPT_URL + "?action=recent-activity");
-        rawActivities = await response.json();
-        
-        // Update the Badge (Counting real logs + 1 for the static Advisory)
-        updateNotifBadge(rawActivities.length + 1);
+    if (!container) return;
 
-        renderActivityList();
-    } catch (e) { console.error(e); }
+    const format = (list) =>
+        list.map(item => {
+            const msg = (item.event || "").toLowerCase();
+
+            let bulletClass = 'bullet-blue';
+            if (msg.includes('registered')) bulletClass = 'bullet-green';
+            if (msg.includes('acquisition')) bulletClass = 'bullet-orange';
+
+            return `
+                <li>
+                    <span class="status-bullet ${bulletClass}"></span>
+                    <div class="activity-info">
+                        <span class="time">${item.timestamp}</span>
+                        <span class="event">${item.event}</span>
+                    </div>
+                </li>
+            `;
+        }).join('');
+
+    container.innerHTML = `
+        ${format(daily)}
+        ${format(weekly)}
+        ${format(monthly)}
+    `;
 }
 
+async function safeFetch(url) {
+    return jsonpFetch(url); // uses proxy, same as all other calls
+}
+document.addEventListener("DOMContentLoaded", () => {
+    updateTrendData();
+});
+
+function updateCharts(trends) {
+
+  line.data.labels = trends.daily.labels;
+  line.data.datasets[0].data = trends.daily.data;
+  line.update();
+
+  donut.update(); // keep as-is if already working
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await fetchStores();
+  await updateTrendData();
+});
+
+async function updateTrendData() {
+
+  const date = new Date().toISOString().split("T")[0];
+  const week = "Overall";
+
+  const data = await safeFetch(
+    SCRIPT_URL +
+    `?action=get-stats&store=${encodeURIComponent(currentStore)}&date=${date}&week=${week}&key=IOS_SECURE_KEY_2026`
+  );
+
+  if (!data || !data.trends) return;
+
+  console.log("TREND DATA:", data.trends);
+
+  updateCharts(data.trends);
+}
+
+function renderCharts(data) {
+    if (!line || !donut) return;
+
+    // Example: adjust safely (based on your existing structure)
+    const daily = data.daily || {};
+    const weekly = data.weekly || {};
+    const monthly = data.monthly || {};
+
+    // If your charts expect arrays, ensure fallback:
+    const labels = daily.labels || [];
+    const values = daily.values || [];
+
+    line.data.labels = labels;
+    line.data.datasets[0].data = values;
+    line.update();
+
+    const outright = donut.data.datasets[0].data[0] || 0;
+    const consignor = donut.data.datasets[0].data[1] || 0;
+
+    donut.data.datasets[0].data = [outright, consignor];
+    donut.update();
+}
    
    </script>
 </body>
